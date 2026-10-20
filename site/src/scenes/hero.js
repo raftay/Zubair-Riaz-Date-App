@@ -1,11 +1,20 @@
-import { invlerp, smoothstep, ease, clamp, TAU } from '../lib/math.js';
+import { docTop } from '../engine.js';
+import { invlerp, smoothstep, ease, clamp, lerp, TAU } from '../lib/math.js';
 import { rng } from '../lib/rand.js';
 import { drawFrond } from '../lib/palm.js';
 
-// 01 · Hero: Zubair holding a date, under a Madinah arch.
+// Where the date sits inside the photo (fraction of the person box).
+export const DATE_IN_PHOTO = [0.356, 0.856];
+// Screen point the camera pushes the date toward, as a fraction of the viewport.
+export const DATE_CENTER = [0.5, 0.52];
+
+// 01 · Hero: Zubair holding a date, under a Madinah arch. The stage is pinned;
+// scrolling pushes the camera into the date he's holding (scene 02 takes over
+// from there, see date.js).
 export function heroScene() {
   const root = document.getElementById('hero');
   const nav = document.getElementById('nav');
+  const photo = root.querySelector('.hero__photo');
   const bg = root.querySelector('.hero__bg');
   const glow = root.querySelector('.hero__glow');
   const beam = root.querySelector('.hero__beam');
@@ -20,10 +29,9 @@ export function heroScene() {
   const feats = [...content.querySelectorAll('.features li')];
   const cue = root.querySelector('.hero__cue');
   const mouseDot = root.querySelector('.mouse b');
-  const sq = (sel) => root.querySelector(sel)._sq;
   const eyebrowSq = content.querySelector('.eyebrow i')._sq;
-  const titleSq = sq('.hero__title');
-  const bodySq = sq('.hero__body');
+  const titleSq = root.querySelector('.hero__title')._sq;
+  const bodySq = root.querySelector('.hero__body')._sq;
   const ctaSqs = ctas.map((b) => b.querySelector('i')._sq);
   const featSqs = feats.map((f) => f.querySelector('i')._sq);
   const navSqs = [...nav.querySelectorAll('[data-sq]')].map((e) => e._sq);
@@ -40,7 +48,8 @@ export function heroScene() {
     ph: r() * TAU,
   }));
 
-  let ctx, W, H, dpr;
+  let ctx, W, H, dpr, top = 0, range = 1;
+  const D = [0, 0];
 
   function paintFronds(s) {
     const c = fronds.getContext('2d');
@@ -64,29 +73,40 @@ export function heroScene() {
       W = s.vw;
       H = s.vh;
       dpr = s.dpr;
+      top = docTop(root);
+      range = root.offsetHeight - H;
       dust.width = Math.round(W * dpr);
       dust.height = Math.round(H * dpr);
       ctx = dust.getContext('2d');
       paintFronds(s);
+      D[0] = person.offsetLeft + DATE_IN_PHOTO[0] * person.offsetWidth;
+      D[1] = person.offsetTop + DATE_IN_PHOTO[1] * person.offsetHeight;
     },
+
+    // hero progress (0..1 across the pinned range)
+    progress: (s) => clamp((s.y - top) / range),
+    // the photographed date's screen point and the push-in zoom at progress p
+    datePoint(p) {
+      const e = ease.inOut(invlerp(0.02, 0.3, p));
+      return [lerp(D[0], DATE_CENTER[0] * W, e), lerp(D[1], DATE_CENTER[1] * H, e), 1 + 2.4 * e];
+    },
+    locate: (k) => top + (k.p ?? 0) * range,
 
     update(s) {
       const t = s.t;
-      const p = clamp(s.y / s.vh); // scroll-out progress
-      if (p >= 1) return; // fully off screen
+      const p = clamp((s.y - top) / range);
+      if (s.y > top + range + H) return; // scrolled away
       const intro = (a, b, fn = ease.out) => fn(invlerp(a, b, t));
 
       // --- intro reveal (virtual clock) ---
       glow.style.opacity = intro(0, 1.6);
       beam.style.opacity = intro(0.4, 2.2) * (0.85 + 0.15 * Math.sin(t * 0.7));
       fronds.style.opacity = intro(0.2, 1.8);
-      const ad = intro(0.3, 2.4, ease.inOut);
-      arch[0].style.strokeDashoffset = 1 - ad;
+      arch[0].style.strokeDashoffset = 1 - intro(0.3, 2.4, ease.inOut);
       arch[1].style.strokeDashoffset = 1 - intro(0.6, 2.8, ease.inOut);
       const pi = intro(0.2, 1.6);
       person.style.opacity = pi;
       person.style.transform = `translateY(${(1 - pi) * 2.2}rem)`;
-      person.style.filter = `brightness(${0.55 + 0.45 * pi})`;
 
       nav.style.opacity = intro(0.6, 1.6);
       navSqs.forEach((q, i) => q.setProgress(invlerp(0.8 + i * 0.08, 1.5 + i * 0.08, t)));
@@ -107,35 +127,43 @@ export function heroScene() {
         featSqs[i].setProgress(invlerp(2.7 + i * 0.12, 3.3 + i * 0.12, t));
       });
 
-      // glint on the date: breathes, then flares as you start to scroll
+      // --- push in on the date (scroll) ---
+      const [dx, dy, Z] = this.datePoint(p);
+      photo.style.transformOrigin = '0 0';
+      photo.style.transform = `translate(${dx - Z * D[0]}px, ${dy - Z * D[1]}px) scale(${Z})`;
+      const blur = 7 * smoothstep(0.1, 0.26, p);
+      photo.style.filter = `blur(${blur.toFixed(2)}px) brightness(${1 - 0.45 * smoothstep(0.08, 0.26, p)})`;
+      photo.style.opacity = 1 - smoothstep(0.22, 0.36, p);
+      bg.style.opacity = 1 - smoothstep(0.06, 0.2, p);
+
+      content.style.opacity = 1 - smoothstep(0.015, 0.09, p);
+      content.style.transform = `translateY(${-smoothstep(0, 0.12, p) * 0.18 * H}px)`;
+
+      // glint on the date: breathes at rest, then flares into the 3D date
       const gl = intro(2.0, 2.9);
       const pulse = 0.82 + 0.18 * Math.sin(t * 2.1) ** 2;
-      const flare = 1 + smoothstep(0, 0.25, p) * 0.5;
-      glint.style.opacity = gl;
-      glint.style.transform = `scale(${pulse * flare}) rotate(${t * 9}deg)`;
+      const flare = smoothstep(0.08, 0.19, p);
+      const gone = smoothstep(0.2, 0.27, p);
+      glint.style.opacity = gl * (1 - gone);
+      glint.style.transform = `translate(${dx}px, ${dy}px) scale(${pulse * (1 + flare * 3.2)}) rotate(${t * 9 + p * 160}deg)`;
 
-      const ci = intro(2.8, 3.4) * (1 - smoothstep(0.02, 0.12, p));
-      cue.style.opacity = ci;
+      cue.style.opacity = intro(2.8, 3.4) * (1 - smoothstep(0.005, 0.04, p));
       cueSq.setProgress(invlerp(2.9, 3.5, t));
       mouseDot.style.transform = `translateY(${((t * 0.8) % 1) * 0.7}rem)`;
       mouseDot.style.opacity = 1 - ((t * 0.8) % 1);
 
-      // --- scroll-out parallax (person moves 1:1 so the thread stays in his hand) ---
-      content.style.transform = `translateY(${-p * s.vh * 0.34}px)`;
-      content.style.opacity = 1 - smoothstep(0.04, 0.32, p);
-      bg.style.transform = `translateY(${p * s.vh * 0.42}px)`;
-
       // --- floating dust in the warm light ---
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
+      const da = intro(0.5, 2.2) * (1 - 0.62 * smoothstep(0.16, 0.32, p)) * (1 - smoothstep(0.85, 1, p));
+      if (da <= 0.01) return;
       ctx.globalCompositeOperation = 'lighter';
-      const da = intro(0.5, 2.2);
       for (const m of motes) {
-        const y = ((m.y - t * m.sp) % 1 + 1) % 1;
-        const x = m.x + Math.sin(t * m.f + m.ph) * m.sw;
+        const y = (((m.y - t * m.sp - p * 0.25 * m.z) % 1) + 1) % 1;
+        const x = m.x + Math.sin(t * m.f + m.ph) * m.sw - 0.12 * smoothstep(0.1, 0.4, p);
         const px = x * W;
-        const py = y * H + p * H * 0.2 * m.z;
-        const size = (0.7 + m.z * 2.4) * (W / 1920);
+        const py = y * H;
+        const size = (0.7 + m.z * 2.4) * (W / 1920) * (1 + 0.7 * m.z * smoothstep(0.05, 0.3, p));
         const tw = 0.25 + 0.75 * Math.sin(t * (0.8 + m.f) + m.ph) ** 2;
         const a = da * tw * (0.25 + 0.55 * m.z) * (1 - smoothstep(0.75, 1, y) * 0.6);
         const g = ctx.createRadialGradient(px, py, 0, px, py, size * 4);

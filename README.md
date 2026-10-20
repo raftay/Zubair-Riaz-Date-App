@@ -2,7 +2,7 @@
 
 A concept "website" for a premium date brand. It's built as a real scrolling page and rendered frame by frame into a video that looks like someone slowly scrolling down it. See [PLAN.md](PLAN.md) for the creative direction and scene-by-scene flow.
 
-**Current stage:** Phase 1 style frame (Hero → bridge → Growth).
+**Current stage:** Scenes 1–4 are built: Hero → the date becomes the seed → planting → growth.
 
 ## Layout
 
@@ -11,7 +11,9 @@ site/        the concept site (Vite, vanilla JS, canvas + SVG; no copy, only squ
   src/engine.js        scroll/clock render loop + capture hooks (window.__zr)
   src/lib/squiggle.js  squiggle "type" that stands in for real text
   src/lib/palm.js      procedural date palm, fronds, roots
-  src/scenes/          one module per scene
+  src/lib/date3d.js    3D Ajwa date + seed (three.js), opens in halves
+  src/scenes/          hero.js (01, pinned) · date.js (02, same stage) · thread.js (falling seed + bridge)
+                       growth.js (03 planting + 04 growth, one continuous pinned shot)
   public/img/          Zubair cut-out (graded, upscaled)
 capture/     Playwright + ffmpeg renderer
   choreography.json    the "human scroll": time → position keyframes
@@ -32,13 +34,15 @@ cd site && npm install && npm run dev      # http://127.0.0.1:5173
 ```bash
 cd site && npm run build                   # the renderer serves the built site
 cd ../capture && npm install
-node stills.mjs                            # → storyboard/*.png
+node stills.mjs                            # → storyboard/*.jpg  (node stills.mjs ../storyboard 1 png for PNG)
 node record.mjs --out ../out/film.mp4      # 1920×1080 @ 60fps
 node record.mjs --scale 2 --png --out ../out/film-4k.mp4   # 3840×2160
 node record.mjs --from 9 --to 15           # render part of the timeline
 ```
 
-Every animation is a pure function of scroll position and a virtual clock, so renders are frame-exact and identical every time. To change the pacing, edit `capture/choreography.json`. You never need to re-record by hand.
+Every animation is a pure function of scroll position and a virtual clock, so renders are frame-exact and identical every time. To change the pacing, edit `capture/choreography.json`. You never need to re-record by hand. Keys name story beats rather than pixels: `{ "at": "hero", "p": 0.4 }` (hero + date scene), `{ "at": "growth", "q": 0.5 }` (planting), `{ "at": "growth", "g": 0.7 }` (growth), or `{ "at": "bridge", "offset": 0.4 }`. The page resolves them itself (`window.__zr.locate`).
+
+The 3D date renders through WebGL. Headless Chromium uses SwiftShader for this (the renderer passes `--enable-unsafe-swiftshader`), so frames in that scene take a little longer to capture.
 
 ## Photo
 

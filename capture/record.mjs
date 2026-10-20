@@ -3,7 +3,7 @@
 import { spawn } from 'node:child_process';
 import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { serve, openPage, frame } from './lib.mjs';
+import { serve, openPage, frame, locate } from './lib.mjs';
 
 const arg = (k, d) => {
   const i = process.argv.indexOf('--' + k);
@@ -48,13 +48,7 @@ function monotone(xs, ys) {
 const server = await serve();
 const { browser, page } = await openPage(server.url, { scale });
 try {
-  const { sections, vh } = await page.evaluate(() => ({ sections: window.__zr.sections(), vh: innerHeight }));
-  const at = (k) => {
-    const s = sections.find((x) => x.id === k.at);
-    if (k.g !== undefined) return s.top + (0.02 + k.g * 0.95) * (s.height - vh);
-    return s.top + (k.offset ?? 0) * vh;
-  };
-  const curve = monotone(chore.keys.map((k) => k.t), chore.keys.map(at));
+  const curve = monotone(chore.keys.map((k) => k.t), await locate(page, chore.keys));
   const end = chore.keys[chore.keys.length - 1].t;
   const from = Number(arg('from', 0));
   const to = Math.min(Number(arg('to', end)), end);

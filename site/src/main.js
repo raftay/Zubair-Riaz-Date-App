@@ -1,22 +1,31 @@
 import '@fontsource/cormorant-garamond/500.css';
 import '@fontsource/cormorant-garamond/600.css';
 import './styles.css';
-import { addScene, start, state, docTop } from './engine.js';
+import { addScene, setLocator, start, docTop } from './engine.js';
 import { mountSquiggles } from './lib/squiggle.js';
 import { mountIcons } from './lib/icons.js';
 import { invlerp, ease, smoothstep } from './lib/math.js';
 import { heroScene } from './scenes/hero.js';
+import { dateScene } from './scenes/date.js';
 import { threadScene } from './scenes/thread.js';
 import { growthScene } from './scenes/growth.js';
 
 mountIcons();
 mountSquiggles();
 
+const hero = heroScene();
 const growth = growthScene();
-addScene(heroScene());
+addScene(hero);
+addScene(dateScene(hero));
 addScene(threadScene());
 addScene(growth);
 addScene(chrome());
+
+setLocator((k) => {
+  if (k.at === 'hero') return hero.locate(k);
+  if (k.at === 'growth') return growth.locate(k);
+  return docTop(document.getElementById(k.at)) + (k.offset ?? 0) * innerHeight;
+});
 
 start();
 
@@ -64,7 +73,7 @@ function chrome() {
       const dark = smoothstep(0.02, 0.14, s.y / H) * smoothstep(0, navH, growthTop - s.y);
       const sand = 1 - smoothstep(0, navH, tailTop - s.y);
       html.style.setProperty('--nav-bg', sand > 0 ? `rgba(236,220,190,${0.78 * sand})` : `rgba(18,11,8,${0.7 * dark})`);
-      const chapter = s.y < growthTop - 0.5 * H ? 0 : onTail ? 4 : 3;
+      const chapter = onTail ? 4 : s.y >= growthTop ? growth.chapter(s) : hero.progress(s) < 0.2 ? 0 : 1;
       dots.forEach((d, i) => d.classList.toggle('is-on', i === chapter));
 
       const f = Math.floor(s.t * 24);

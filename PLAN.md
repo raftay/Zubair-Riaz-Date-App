@@ -2,7 +2,12 @@
 
 **Project plan & design flow** · v1
 
-> **Status:** All §9 decisions are locked to the defaults: public placeholder photo, illustrated/3D style, wordmark as the only real text, 1080p preview → 4K final, full-bleed framing, ~90s, Madinah Ajwa angle. **Phase 1 (style frame) is built:** the Hero, a bridge statement, and the Growth scene, rendered as stills (`storyboard/`) plus a motion preview. It's waiting on look approval before Phase 2.
+> **Status:** All §9 decisions are locked to the defaults. **Phase 1 style frame: approved.** **Scenes 2 and 3 are built**, so scenes 1–4 now run as one film:
+> - The pinned hero pushes into the date, which becomes a real-time 3D Ajwa date, opens, and lets its seed fall.
+> - The seed rides the golden thread past the bridge statement.
+> - Planting and growth are one continuous pinned shot: night fall, landing, burrowing, and the soil probes and cards, then the sprout.
+>
+> **Next:** 05 Water.
 
 ---
 

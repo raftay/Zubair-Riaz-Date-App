@@ -26,7 +26,7 @@ export async function serve() {
 }
 
 export async function openPage(url, { width = 1920, height = 1080, scale = 1 } = {}) {
-  const browser = await chromium.launch({ args: ['--hide-scrollbars', '--force-color-profile=srgb'] });
+  const browser = await chromium.launch({ args: ['--hide-scrollbars', '--force-color-profile=srgb', '--enable-unsafe-swiftshader'] });
   const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: scale });
   page.on('pageerror', (e) => console.error('[page error]', e.message));
   page.on('console', (m) => m.type() === 'error' && console.error('[console]', m.text()));
@@ -47,13 +47,8 @@ export async function frame(page, y, t) {
   );
 }
 
-// Map a named position to a document scroll y.
-export function resolveY(sections, vh, shot) {
-  if (shot.y !== undefined) return shot.y;
-  const s = sections.find((x) => x.id === shot.section);
-  if (shot.g !== undefined) {
-    const range = s.height - vh;
-    return s.top + (0.02 + shot.g * 0.95) * range;
-  }
-  return s.top + (shot.offset ?? 0) * vh;
+// Resolve choreography keys ({ at, p | q | g | offset }) to scroll positions using
+// the page's own scene math, so timings never drift from the layout.
+export async function locate(page, keys) {
+  return page.evaluate((ks) => ks.map((k) => (k.y !== undefined ? k.y : window.__zr.locate(k))), keys);
 }

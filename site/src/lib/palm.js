@@ -417,7 +417,7 @@ export function buildRoots(seed = 5) {
     }
   };
   // tap root continues the golden thread straight down from the seed
-  grow(0, 34, Math.PI / 2, 300, 0, 0.4, 2.2, 1, true);
+  grow(0, 34, Math.PI / 2, 300, -0.1, 0.5, 2.2, 1, true); // begins as the seed settles
   for (let i = 0; i < 22; i++) {
     const side = i % 2 ? 1 : -1;
     const spread = r.range(0.12, 1.15);

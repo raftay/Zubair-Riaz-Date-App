@@ -1,23 +1,25 @@
 import { docTop } from '../engine.js';
 import { clamp, invlerp, ease } from '../lib/math.js';
 
-// The golden thread: starts as the glint on the date in Zubair's hand and is
-// drawn down the page as you scroll, landing on the seed in the growth scene.
-// Its tip always leads a little below the middle of the screen.
+// The falling seed rides the tip of the thread at this fraction of the viewport.
+export const LEAD = 0.62;
+
+// The golden thread: picks up where the date scene lets the seed fall and is
+// drawn down the page as you scroll. The seed itself is the tip, so it seems
+// to drift down through the page, landing in the soil scene.
 export function threadScene() {
   const svg = document.getElementById('thread');
   const glow = svg.querySelector('.thread__glow');
   const core = svg.querySelector('.thread__core');
-  const tip = svg.querySelector('.thread__tip');
-  const person = document.querySelector('.hero__person');
-  const glint = document.querySelector('.hero__glint');
+  const seed = svg.querySelector('.thread__seed');
+  const hero = document.getElementById('hero');
   const bridge = document.getElementById('bridge');
   const growth = document.getElementById('growth');
   const bridgeInner = bridge.querySelector('.bridge__inner');
   const bridgeMark = bridge.querySelector('.bridge__mark');
   const [bLabel, bTitle] = [...bridge.querySelectorAll('[data-sq]')].map((e) => e._sq);
 
-  let total = 0, table = [], innerTop = 0;
+  let total = 0, table = [], innerTop = 0, start = 0, k = 1;
 
   // Catmull-Rom through points -> cubic Bézier path data
   function spline(pts) {
@@ -34,17 +36,18 @@ export function threadScene() {
   return {
     resize(s) {
       const W = s.vw, H = s.vh;
-      const gx = person.offsetLeft + glint.offsetLeft + glint.offsetWidth / 2;
-      const gy = person.offsetTop + glint.offsetTop + glint.offsetHeight / 2;
+      k = W / 1920;
+      start = docTop(hero) + hero.offsetHeight - H; // where the hero stage unpins
       const bTop = docTop(bridge);
       const bH = bridge.offsetHeight;
       const end = docTop(growth);
       const ex = 0.62 * W;
       const pts = [
-        [gx, gy],
-        [gx + 0.03 * W, gy + 0.2 * H],
-        [0.8 * W, bTop + 0.38 * bH],
-        [0.76 * W, bTop + 0.74 * bH],
+        [0.5 * W, start + LEAD * H],
+        [0.5 * W, start + (LEAD + 0.08) * H],
+        [0.53 * W, start + (LEAD + 0.3) * H],
+        [0.79 * W, bTop + 0.4 * bH],
+        [0.75 * W, bTop + 0.76 * bH],
         [ex, end - 0.16 * H],
         [ex, end - 0.02 * H],
         [ex, end],
@@ -57,8 +60,8 @@ export function threadScene() {
       core.setAttribute('d', d);
       total = core.getTotalLength();
       table = [];
-      for (let i = 0; i <= 600; i++) {
-        const l = (i / 600) * total;
+      for (let i = 0; i <= 800; i++) {
+        const l = (i / 800) * total;
         const p = core.getPointAtLength(l);
         table.push([l, p.x, p.y]);
       }
@@ -68,19 +71,20 @@ export function threadScene() {
 
     update(s) {
       const H = s.vh;
-      // length whose point sits at the target depth below the viewport top
-      const target = s.y + 0.8 * H;
+      // length whose point sits at the seed's depth in the viewport
+      const target = s.y + LEAD * H;
       let i = 0;
       while (i < table.length - 1 && table[i][2] < target) i++;
       const [len, x, y] = table[i];
-      const shown = s.y > 4 ? len : 0;
+      const shown = s.y > start ? len : 0;
       for (const el of [glow, core]) el.style.strokeDashoffset = total - shown;
-      const tipOn = shown > 4 && shown < total - 2;
-      tip.style.opacity = tipOn ? 1 : 0;
+      const tipOn = s.y > start && shown < total - 1;
+      seed.style.opacity = tipOn ? 1 : 0;
       if (tipOn) {
-        tip.setAttribute('cx', x);
-        tip.setAttribute('cy', y);
-        tip.setAttribute('r', 3.2 + 1.2 * Math.sin(s.t * 6) ** 2);
+        // tilt with the curve, like a seed drifting as it falls
+        const j = Math.max(1, i);
+        const ang = Math.atan2(table[j][1] - table[j - 1][1], table[j][2] - table[j - 1][2]);
+        seed.setAttribute('transform', `translate(${x} ${y}) rotate(${(-ang * 180) / Math.PI * 0.8}) scale(${k})`);
       }
 
       // bridge statement writes itself as it rises into view

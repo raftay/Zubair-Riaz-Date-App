@@ -11,6 +11,12 @@ export function addScene(scene) {
   scenes.push(scene);
 }
 
+// Resolves a choreography key ({ at: section, ... }) to a scroll position.
+let locator = () => 0;
+export function setLocator(fn) {
+  locator = fn;
+}
+
 // Absolute document top of an element (stable while scrolling, unlike getBoundingClientRect).
 export function docTop(el) {
   let y = 0;
@@ -68,6 +74,7 @@ export async function start() {
       render();
     },
     maxScroll: () => document.documentElement.scrollHeight - window.innerHeight,
+    locate: (k) => locator(k),
     // Document positions of each section, for writing scroll choreography.
     sections: () =>
       [...document.querySelectorAll('[data-scene]')].map((el) => ({

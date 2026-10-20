@@ -37,43 +37,89 @@
     </aside>
 
     <main>
-      <!-- 01 · HERO -->
+      <!-- 01 · HERO  +  02 · THE DATE BECOMES THE SEED (one pinned stage) -->
       <section class="hero" id="hero" data-scene>
-        <div class="hero__bgclip">
-        <div class="hero__bg">
-          <canvas class="hero__fronds"></canvas>
-          <div class="hero__beam"></div>
-          <div class="hero__glow"></div>
-          <svg class="hero__arch" viewBox="0 0 660 900" preserveAspectRatio="xMidYMax meet">
-            <path pathLength="1" d="M10 900 V340 C10 175 205 70 330 10 C455 70 650 175 650 340 V900" />
-            <path pathLength="1" d="M34 900 V346 C34 196 214 98 330 40 C446 98 626 196 626 346 V900" />
-          </svg>
-        </div>
-        </div>
-        <canvas class="hero__dust"></canvas>
-        <div class="hero__person">
-          <img src="/img/zubair.webp" alt="" />
-          <span class="hero__glint"></span>
-        </div>
-
-        <div class="hero__content">
-          <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="12" data-seed="31"></i></div>
-          <i class="hero__title" data-sq="display" data-w="36" data-lines="2" data-seed="32" data-last="0.7"></i>
-          <i class="hero__body" data-sq="body" data-w="27" data-lines="3" data-seed="33"></i>
-          <div class="hero__ctas">
-            <a class="btn btn--gold"><i data-sq="label" data-w="7" data-seed="34"></i><span data-icon="arrow"></span></a>
-            <a class="btn btn--ghost"><i data-sq="label" data-w="7.5" data-seed="35"></i></a>
+        <div class="hero__stage">
+          <div class="hero__photo">
+            <div class="hero__bgclip">
+              <div class="hero__bg">
+                <canvas class="hero__fronds"></canvas>
+                <div class="hero__beam"></div>
+                <div class="hero__glow"></div>
+                <svg class="hero__arch" viewBox="0 0 660 900" preserveAspectRatio="xMidYMax meet">
+                  <path pathLength="1" d="M10 900 V340 C10 175 205 70 330 10 C455 70 650 175 650 340 V900" />
+                  <path pathLength="1" d="M34 900 V346 C34 196 214 98 330 40 C446 98 626 196 626 346 V900" />
+                </svg>
+              </div>
+            </div>
+            <div class="hero__person"><img src="/img/zubair.webp" alt="" /></div>
           </div>
-          <ul class="features">
-            <li><span data-icon="palm"></span><i data-sq="label" data-w="6" data-seed="36"></i></li>
-            <li><span data-icon="drop"></span><i data-sq="label" data-w="6.5" data-seed="37"></i></li>
-            <li><span data-icon="globe"></span><i data-sq="label" data-w="5.5" data-seed="38"></i></li>
-          </ul>
-        </div>
+          <div class="date__glow"></div>
+          <canvas class="hero__dust"></canvas>
+          <span class="hero__glint"></span>
+          <svg class="date__orbit" viewBox="-500 -160 1000 320">
+            <ellipse class="date__orbit-ring" rx="420" ry="112" pathLength="1" />
+            <ellipse class="date__orbit-ticks" rx="452" ry="122" pathLength="1" />
+          </svg>
+          <canvas class="date__gl"></canvas>
+          <svg class="date__trail">
+            <path class="date__trail-glow" />
+            <path class="date__trail-core" />
+            <path class="date__lead" pathLength="1" />
+            <circle class="date__lead-dot" r="4" />
+            <g class="seedglyph">
+              <circle class="seedglyph__halo" r="22" />
+              <ellipse class="seedglyph__body" rx="7.1" ry="14.4" />
+              <path class="seedglyph__groove" d="M0 -11 Q1.2 0 0 11" />
+            </g>
+          </svg>
 
-        <div class="hero__cue">
-          <span class="mouse"><b></b></span>
-          <i data-sq="label" data-w="5" data-seed="39"></i>
+          <div class="hero__content">
+            <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="12" data-seed="31"></i></div>
+            <i class="hero__title" data-sq="display" data-w="36" data-lines="2" data-seed="32" data-last="0.7"></i>
+            <i class="hero__body" data-sq="body" data-w="27" data-lines="3" data-seed="33"></i>
+            <div class="hero__ctas">
+              <a class="btn btn--gold"><i data-sq="label" data-w="7" data-seed="34"></i><span data-icon="arrow"></span></a>
+              <a class="btn btn--ghost"><i data-sq="label" data-w="7.5" data-seed="35"></i></a>
+            </div>
+            <ul class="features">
+              <li><span data-icon="palm"></span><i data-sq="label" data-w="6" data-seed="36"></i></li>
+              <li><span data-icon="drop"></span><i data-sq="label" data-w="6.5" data-seed="37"></i></li>
+              <li><span data-icon="globe"></span><i data-sq="label" data-w="5.5" data-seed="38"></i></li>
+            </ul>
+          </div>
+
+          <!-- product moment: the Ajwa date -->
+          <div class="date-ui date-ui--product">
+            <div class="date-ui__left">
+              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="9" data-seed="141"></i></div>
+              <i data-sq="display" data-w="27" data-lines="2" data-seed="142" data-last="0.55"></i>
+              <i class="date-ui__body" data-sq="body" data-w="22" data-lines="3" data-seed="143"></i>
+            </div>
+            <ul class="date-ui__specs">
+              <li><span data-icon="palm"></span><div><i data-sq="label" data-w="6.5" data-seed="144"></i><i data-sq="body" data-w="12" data-lines="2" data-seed="145"></i></div></li>
+              <li><span data-icon="sun"></span><div><i data-sq="label" data-w="5.5" data-seed="146"></i><i data-sq="body" data-w="12" data-lines="2" data-seed="147"></i></div></li>
+              <li><span data-icon="leaf"></span><div><i data-sq="label" data-w="7" data-seed="148"></i><i data-sq="body" data-w="12" data-lines="2" data-seed="149"></i></div></li>
+            </ul>
+          </div>
+
+          <!-- inside the date: the seed -->
+          <div class="date-ui date-ui--inside">
+            <div class="date-ui__left">
+              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="8" data-seed="151"></i></div>
+              <i data-sq="display" data-w="25" data-lines="2" data-seed="152" data-last="0.5"></i>
+              <i class="date-ui__body" data-sq="body" data-w="20" data-lines="2" data-seed="153"></i>
+            </div>
+            <div class="date-ui__callout">
+              <div class="date-ui__tag"><span data-icon="seed"></span><i data-sq="label" data-w="6" data-seed="154"></i></div>
+              <i data-sq="body" data-w="13" data-lines="2" data-seed="155"></i>
+            </div>
+          </div>
+
+          <div class="hero__cue">
+            <span class="mouse"><b></b></span>
+            <i data-sq="label" data-w="5" data-seed="39"></i>
+          </div>
         </div>
       </section>
 
@@ -86,11 +132,53 @@
         </div>
       </section>
 
-      <!-- 04 · GROWTH -->
+      <!-- 03 · PLANTING  +  04 · GROWTH (one continuous pinned shot) -->
       <section class="growth" id="growth" data-scene>
         <div class="growth__stage">
           <canvas class="growth__canvas"></canvas>
           <div class="growth__ui">
+            <div class="s-head">
+              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="9" data-seed="91"></i></div>
+              <i data-sq="title" data-w="28" data-lines="2" data-seed="92" data-last="0.5"></i>
+              <i class="s-head__body" data-sq="body" data-w="23" data-lines="3" data-seed="93"></i>
+            </div>
+
+            <div class="s-card" id="card-moist">
+              <span class="s-card__lead"></span>
+              <div class="s-card__head"><span data-icon="drop"></span><i data-sq="label" data-w="6" data-seed="94"></i></div>
+              <svg class="s-card__meter" viewBox="0 0 200 26"></svg>
+              <i data-sq="body" data-w="10.5" data-lines="1" data-seed="95"></i>
+            </div>
+            <div class="s-card" id="card-ph">
+              <span class="s-card__lead"></span>
+              <div class="s-card__head"><span data-icon="flask"></span><i data-sq="label" data-w="4.5" data-seed="96"></i></div>
+              <svg class="s-card__gauge" viewBox="0 0 200 92">
+                <defs>
+                  <linearGradient id="phGrad" x1="0" x2="1">
+                    <stop offset="0" stop-color="#d0643a" /><stop offset="0.35" stop-color="#e3b44e" />
+                    <stop offset="0.6" stop-color="#8fb05a" /><stop offset="1" stop-color="#4f8a9a" />
+                  </linearGradient>
+                </defs>
+                <path class="arc" d="M24 84 A76 76 0 0 1 176 84" pathLength="1" />
+                <line class="needle" x1="100" y1="84" x2="100" y2="22" />
+                <circle class="hub" cx="100" cy="84" r="6" />
+              </svg>
+              <i data-sq="body" data-w="10" data-lines="1" data-seed="97"></i>
+            </div>
+            <div class="s-card" id="card-min">
+              <span class="s-card__lead"></span>
+              <div class="s-card__head"><span data-icon="gem"></span><i data-sq="label" data-w="6.5" data-seed="98"></i></div>
+              <div class="s-card__donut">
+                <svg viewBox="0 0 100 100"><g class="donut"></g></svg>
+                <ul>
+                  <li><b style="--c:#e3b44e"></b><i data-sq="label" data-w="3.6" data-seed="101"></i></li>
+                  <li><b style="--c:#b97a3c"></b><i data-sq="label" data-w="4.2" data-seed="102"></i></li>
+                  <li><b style="--c:#8fa66a"></b><i data-sq="label" data-w="3.2" data-seed="103"></i></li>
+                  <li><b style="--c:#d9cbb0"></b><i data-sq="label" data-w="3.8" data-seed="104"></i></li>
+                </ul>
+              </div>
+            </div>
+
             <div class="g-head">
               <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="10" data-seed="51"></i></div>
               <i data-sq="title" data-w="30" data-lines="2" data-seed="52" data-last="0.6"></i>
@@ -144,7 +232,11 @@
     <svg class="thread" id="thread" aria-hidden="true">
       <path class="thread__glow" />
       <path class="thread__core" />
-      <circle class="thread__tip" r="4" />
+      <g class="seedglyph thread__seed">
+        <circle class="seedglyph__halo" r="22" />
+        <ellipse class="seedglyph__body" rx="7.1" ry="14.4" />
+        <path class="seedglyph__groove" d="M0 -11 Q1.2 0 0 11" />
+      </g>
     </svg>
 
     <script type="module" src="/src/main.js"></script>

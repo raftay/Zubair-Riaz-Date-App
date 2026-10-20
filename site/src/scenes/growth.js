@@ -1,7 +1,8 @@
 import { docTop } from '../engine.js';
-import { TAU, clamp, lerp, invlerp, smoothstep, keys, fract, hex, mix, rgba, ramp, luma, ease } from '../lib/math.js';
+import { TAU, clamp, lerp, invlerp, smoothstep, keys, fract, hex, mix, rgba, luma, ease } from '../lib/math.js';
 import { rng, noise1 } from '../lib/rand.js';
 import { Palm, buildRoots, drawRoots, TRUNK_MAX } from '../lib/palm.js';
+import { LEAD } from './thread.js';
 
 const C = hex;
 const SKY = {
@@ -23,6 +24,11 @@ const INK_LIGHT = C('#F7F0E3');
 const INK_DARK = C('#23160D');
 
 const CYCLES = 3.42; // ends mid-morning, sun upper-left of the palm
+// The pinned range is split: planting (scene 03) first, then growth (scene 04).
+const P1 = 0.325;
+const G0 = P1 + 0.01; // brief hold between the two
+const G1 = 0.975;
+const PROBE_DEPTH = [6, 16, 26]; // soil probes above each card (world units)
 const G_SUN = 0.1; // first sunrise
 
 // Environment (sky, light) as a pure function of growth g.
@@ -114,6 +120,52 @@ export function growthScene() {
     bars.push(rect);
   }
 
+  // planting (03) UI
+  const sHead = root.querySelector('.s-head');
+  const sRule = sHead.querySelector('.eyebrow__rule');
+  const sHeadSqs = [...sHead.querySelectorAll('[data-sq]')].map((e) => e._sq);
+  const sCards = ['#card-moist', '#card-ph', '#card-min'].map((id) => {
+    const el = root.querySelector(id);
+    return { el, sqs: [...el.querySelectorAll('[data-sq]')].map((e) => e._sq), node: [0, 0] };
+  });
+  const meter = root.querySelector('.s-card__meter');
+  const cells = [];
+  for (let i = 0; i < 12; i++) {
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', i * 16.8);
+    rect.setAttribute('y', 2);
+    rect.setAttribute('width', 12.5);
+    rect.setAttribute('height', 22);
+    rect.setAttribute('rx', 3);
+    meter.appendChild(rect);
+    cells.push(rect);
+  }
+  const phArc = root.querySelector('.s-card__gauge .arc');
+  const phNeedle = root.querySelector('.s-card__gauge .needle');
+  const donutG = root.querySelector('.s-card__donut .donut');
+  const donut = [0.34, 0.27, 0.22, 0.17].map((share, i, all) => {
+    const a0 = all.slice(0, i).reduce((x, y) => x + y, 0);
+    const p0 = a0 * TAU - Math.PI / 2 + 0.05, p1 = (a0 + share) * TAU - Math.PI / 2 - 0.05;
+    const path = document.createElementNS(NS, 'path');
+    path.setAttribute('d', `M${50 + 36 * Math.cos(p0)} ${50 + 36 * Math.sin(p0)} A36 36 0 ${share > 0.5 ? 1 : 0} 1 ${50 + 36 * Math.cos(p1)} ${50 + 36 * Math.sin(p1)}`);
+    path.setAttribute('pathLength', '1');
+    path.setAttribute('stroke', ['#e3b44e', '#b97a3c', '#8fa66a', '#d9cbb0'][i]);
+    path.style.strokeDasharray = '1 2';
+    donutG.appendChild(path);
+    return path;
+  });
+  // loose soil that tumbles into the hole above the buried seed
+  const G = rng(77);
+  const grains = Array.from({ length: 46 }, () => {
+    const side = G.sign();
+    return {
+      sx: side * G.range(6, 34), sy: G.range(-3, 0),
+      ex: side * G.range(0, 9), ey: G.range(2, 30),
+      ts: G.range(0.4, 0.55), r: G.range(1.1, 2.4),
+      c: C(G.pick(['#9c7a52', '#87653f', '#715332', '#a8875e'])),
+    };
+  });
+
   const palm = new Palm(7);
   const roots = buildRoots(5);
   const nz = noise1(21);
@@ -157,6 +209,28 @@ export function growthScene() {
   let cardSize = [];
 
   const cam = { ox: 0, oy: 0, s: 1 };
+  // 03: tracks the falling seed from the night sky down to the soil, then
+  // zooms into the cross-section; ends exactly where camera(g = 0) begins.
+  function plantCamera(q) {
+    const k = H / 1080;
+    cam.s = keys(q, [[0, 1.15], [0.3, 1.5], [0.68, 3.4]]) * k;
+    cam.oy = keys(q, [[0, 1.42], [0.3, 0.74], [0.68, 0.56]]) * H;
+    cam.ox = 0.62 * W;
+  }
+  // the falling seed's world position (y down) and tilt during planting
+  function seedPose(q, ly) {
+    const k = H / 1080;
+    const u = invlerp(0, 0.3, q);
+    const landY = 0.74 * H - 12.5 * 1.5 * k;
+    if (q < 0.3) {
+      const sy = ly < 0 ? LEAD * H + ly : lerp(LEAD * H, landY, ease.inOut(u));
+      return { y: (sy - cam.oy) / cam.s, rot: 0.5 * Math.sin(u * Math.PI * 3) * (1 - u), sy };
+    }
+    const b = invlerp(0.3, 0.36, q);
+    const dig = ease.inOut(invlerp(0.36, 0.5, q));
+    const y = q < 0.36 ? -12.5 - 4 * Math.sin(Math.PI * b) : lerp(-12.5, 34, dig);
+    return { y, rot: 0.28 * dig, sy: cam.oy + y * cam.s };
+  }
   function camera(g) {
     const k = H / 1080;
     cam.s = keys(g, [[0, 3.4], [0.14, 2.7], [0.34, 1.62], [0.6, 1.1], [1, 0.9]]) * k;
@@ -185,6 +259,30 @@ export function growthScene() {
       ctx.fill();
     }
     ctx.globalAlpha = 1;
+  }
+
+  function drawMoon(a) {
+    if (a <= 0.01) return;
+    const x = 0.8 * W, y = 0.19 * H, r = 0.024 * H;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, r * 7);
+    halo.addColorStop(0, `rgba(255,236,200,${0.16 * a})`);
+    halo.addColorStop(1, 'rgba(255,236,200,0)');
+    ctx.fillStyle = halo;
+    ctx.fillRect(x - r * 7, y - r * 7, r * 14, r * 14);
+    ctx.restore();
+    // crescent: the lit disc, clipped, minus an offset disc
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, TAU);
+    ctx.clip();
+    ctx.beginPath();
+    ctx.rect(x - r, y - r, r * 2, r * 2);
+    ctx.arc(x + r * 0.45, y - r * 0.18, r * 0.92, 0, TAU);
+    ctx.fillStyle = `rgba(255,240,212,${0.92 * a})`;
+    ctx.fill('evenodd');
+    ctx.restore();
   }
 
   function drawSun(env, t) {
@@ -303,7 +401,7 @@ export function growthScene() {
       ctx.closePath();
       const top_ = Y(DEPTH[i]);
       const gr = ctx.createLinearGradient(0, top_, 0, top_ + (DEPTH[i + 1] ? DEPTH[i + 1] - DEPTH[i] : 160) * s);
-      const c = SOIL[i].map((v, j) => v * lerp(1, env.amb[j], i === 0 ? 0.8 : 0.35));
+      const c = SOIL[i].map((v, j) => v * lerp(1, env.amb[j], i === 0 ? 0.55 : 0.18));
       gr.addColorStop(0, rgba(i === 0 ? mix(c, C('#E7C796'), 0.18) : c));
       gr.addColorStop(1, rgba(mix(c, C('#000000'), 0.18)));
       ctx.fillStyle = gr;
@@ -354,7 +452,7 @@ export function growthScene() {
     // depth falloff + cut-face shadow
     const d = ctx.createLinearGradient(0, cam.oy, 0, H);
     d.addColorStop(0, 'rgba(12,7,4,0)');
-    d.addColorStop(1, 'rgba(12,7,4,0.5)');
+    d.addColorStop(1, 'rgba(12,7,4,0.36)');
     ctx.fillStyle = d;
     ctx.fillRect(0, cam.oy, W, H - cam.oy);
     const lip = ctx.createLinearGradient(0, cam.oy, 0, cam.oy + 16 * s);
@@ -378,14 +476,14 @@ export function growthScene() {
     ctx.fillRect(0, cam.oy - 0.5, W, Math.max(1, 1.2 * s));
   }
 
-  function drawSeed(g) {
+  function drawSeed(g, wy = 34, rot = 0.28) {
     const s = cam.s;
-    const x = cam.ox, y = cam.oy + 34 * s;
+    const x = cam.ox, y = cam.oy + wy * s;
     const open = smoothstep(0.01, 0.06, g);
     for (const side of [-1, 1]) {
       ctx.save();
       ctx.translate(x + side * open * 1.6 * s, y);
-      ctx.rotate(0.28 + side * open * 0.12);
+      ctx.rotate(rot + side * open * 0.12);
       ctx.beginPath();
       ctx.ellipse(0, 0, 6.2 * s, 12.5 * s, 0, side < 0 ? Math.PI / 2 : -Math.PI / 2, side < 0 ? Math.PI * 1.5 : Math.PI / 2);
       ctx.closePath();
@@ -398,7 +496,7 @@ export function growthScene() {
     }
     ctx.save();
     ctx.translate(x, y);
-    ctx.rotate(0.28);
+    ctx.rotate(rot);
     ctx.beginPath();
     ctx.moveTo(0, -10 * s);
     ctx.quadraticCurveTo(1.2 * s, 0, 0, 10 * s);
@@ -406,6 +504,92 @@ export function growthScene() {
     ctx.lineWidth = Math.max(0.6, 0.9 * s);
     ctx.stroke();
     ctx.restore();
+  }
+
+  function drawBurrow(q, seedWy, amb) {
+    const s = cam.s;
+    const a = smoothstep(0.36, 0.4, q) * (1 - smoothstep(0.52, 0.62, q));
+    if (a > 0) {
+      const bottom = Math.max(0, seedWy - 10);
+      ctx.beginPath();
+      ctx.moveTo(cam.ox - 15 * s, cam.oy);
+      ctx.quadraticCurveTo(cam.ox - 9 * s, cam.oy + bottom * 0.4 * s, cam.ox - 6 * s, cam.oy + bottom * s);
+      ctx.lineTo(cam.ox + 6 * s, cam.oy + bottom * s);
+      ctx.quadraticCurveTo(cam.ox + 9 * s, cam.oy + bottom * 0.4 * s, cam.ox + 15 * s, cam.oy);
+      ctx.closePath();
+      ctx.fillStyle = `rgba(34,20,10,${0.7 * a})`;
+      ctx.fill();
+    }
+    const ga = smoothstep(0.37, 0.41, q) * (1 - smoothstep(0.58, 0.64, q));
+    if (ga <= 0) return;
+    for (const gr of grains) {
+      const u = clamp((q - gr.ts) / 0.04);
+      const x = lerp(gr.sx, gr.ex, u);
+      const y = lerp(gr.sy, gr.ey, u * u);
+      ctx.beginPath();
+      ctx.arc(cam.ox + x * s, cam.oy + y * s, gr.r * s * 0.6, 0, TAU);
+      ctx.fillStyle = rgba(gr.c.map((v, j) => v * lerp(1, amb[j], 0.5)));
+      ctx.globalAlpha = ga;
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawPulse(q, x, y) {
+    const k = W / 1920;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 3; i++) {
+      const v = invlerp(0.54 + i * 0.05, 0.74 + i * 0.05, q);
+      if (v <= 0 || v >= 1) continue;
+      ctx.beginPath();
+      ctx.arc(x, y, (20 + ease.out(v) * 300) * k, 0, TAU);
+      ctx.strokeStyle = `rgba(240,200,120,${0.55 * (1 - v)})`;
+      ctx.lineWidth = 1.6 * k;
+      ctx.stroke();
+    }
+    const gl = smoothstep(0.5, 0.56, q) * (1 - smoothstep(0.6, 0.8, q));
+    if (gl > 0) {
+      const g = ctx.createRadialGradient(x, y, 0, x, y, 70 * k);
+      g.addColorStop(0, `rgba(255,214,140,${0.45 * gl})`);
+      g.addColorStop(1, 'rgba(255,190,100,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(x - 70 * k, y - 70 * k, 140 * k, 140 * k);
+    }
+    ctx.restore();
+  }
+
+  // glowing sample points in the soil, one under each data card
+  function drawProbes(vis, t) {
+    const k = W / 1920;
+    sCards.forEach((c, i) => {
+      const v = vis[i];
+      if (v <= 0) return;
+      const [x, y] = c.node;
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      const g = ctx.createRadialGradient(x, y, 0, x, y, 22 * k);
+      g.addColorStop(0, `rgba(255,226,150,${0.75 * v})`);
+      g.addColorStop(1, 'rgba(255,200,100,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(x - 22 * k, y - 22 * k, 44 * k, 44 * k);
+      const ping = (t * 0.6 + i * 0.33) % 1;
+      ctx.beginPath();
+      ctx.arc(x, y, (8 + ping * 26) * k, 0, TAU);
+      ctx.strokeStyle = `rgba(240,207,134,${0.6 * v * (1 - ping)})`;
+      ctx.lineWidth = 1.2 * k;
+      ctx.stroke();
+      ctx.restore();
+      ctx.beginPath();
+      ctx.arc(x, y, 4 * k, 0, TAU);
+      ctx.fillStyle = `rgba(255,243,207,${v})`;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x, y, 9 * k, 0, TAU);
+      ctx.strokeStyle = `rgba(240,207,134,${0.75 * v})`;
+      ctx.lineWidth = 1.2 * k;
+      ctx.stroke();
+    });
   }
 
   function strokeThread(path, alpha) {
@@ -422,32 +606,19 @@ export function growthScene() {
   }
 
   // returns the screen-space node positions for the data cards
-  function drawThread(g, Ht, ly) {
+  function drawThread(g, Ht, seedY) {
     const s = cam.s;
     const k = W / 1920;
-    const seedY = cam.oy + 34 * s;
-    // continuation of the page-level thread coming down from the hero
-    // (drawn in step with the page thread, whose tip leads at 80% of the viewport)
+    // continuation of the page-level thread, ending at the seed it carried down
     const a0 = 1 - smoothstep(0, 0.06, g);
-    const tipY = Math.min(seedY, 0.8 * H + ly);
-    if (a0 > 0 && tipY > 0) {
+    if (a0 > 0 && seedY > 0) {
       const p = new Path2D();
       p.moveTo(cam.ox, 0);
-      p.lineTo(cam.ox, tipY);
+      p.lineTo(cam.ox, seedY);
       strokeThread(p, a0);
-      if (tipY < seedY - 1) {
-        ctx.save();
-        ctx.globalCompositeOperation = 'lighter';
-        const gr = ctx.createRadialGradient(cam.ox, tipY, 0, cam.ox, tipY, 14 * k);
-        gr.addColorStop(0, 'rgba(255,243,207,1)');
-        gr.addColorStop(1, 'rgba(255,200,100,0)');
-        ctx.fillStyle = gr;
-        ctx.fillRect(cam.ox - 14 * k, tipY - 14 * k, 28 * k, 28 * k);
-        ctx.restore();
-      }
     }
     // seed up to the surface
-    const a1 = smoothstep(0.015, 0.07, g) * (tipY >= seedY - 1 ? 1 : 0);
+    const a1 = smoothstep(0.015, 0.07, g);
     if (a1 > 0) {
       const p = new Path2D();
       p.moveTo(cam.ox, seedY);
@@ -518,16 +689,39 @@ export function growthScene() {
       top = docTop(root);
       range = root.offsetHeight - H;
       cardSize = cards.map((c) => [c.el.offsetWidth, c.el.offsetHeight]);
+      // soil cards sit in a row; each probe hangs above its card, at a fixed depth
+      const rem = W / 120;
+      const sF = 3.4 * (H / 1080);
+      sCards.forEach((c, i) => {
+        c.size = [c.el.offsetWidth, c.el.offsetHeight];
+        c.left = 9.5 * rem + i * (c.size[0] + 1.6 * rem);
+        c.top = 0.7 * H;
+        c.world = [(c.left + c.size[0] / 2 - 0.62 * W) / sF, PROBE_DEPTH[i]];
+      });
+    },
+
+    // choreography positions: { q } planting 0..1, { g } growth 0..1
+    locate(k) {
+      if (k.q !== undefined) return top + k.q * P1 * range;
+      if (k.g !== undefined) return top + (G0 + k.g * (G1 - G0)) * range;
+      return top + (k.offset ?? 0) * H;
+    },
+    chapter(s) {
+      return (s.y - top) / range < G0 ? 2 : 3;
     },
 
     update(s) {
       const ly = s.y - top;
       if (ly < -H || ly > range + H) return;
       const p = clamp(ly / range);
-      const g = invlerp(0.02, 0.97, p);
+      const planting = p < G0;
+      const q = invlerp(0, P1, p);
+      const g = invlerp(G0, G1, p);
+      const L = planting ? q - 1 : g; // one clock across both scenes: -1..0 planting, 0..1 growth
       const t = s.t;
 
-      camera(g);
+      if (planting) plantCamera(q);
+      else camera(g);
       const hor = cam.oy - 11 * cam.s;
       const env = environment(g, W, H, hor);
       env.lightSide = clamp((env.sunX - cam.ox) / (0.35 * W), -1, 1) || -1;
@@ -541,22 +735,52 @@ export function growthScene() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       drawSky(env, hor);
       drawStars((1 - smoothstep(0.03, 0.13, g)) * 0.9, t);
+      drawMoon(1 - smoothstep(0.02, 0.1, g));
       drawSun(env, t);
       drawHorizon(env, hor);
       drawGroundTop(env);
       drawSoil(env, t);
-      drawRoots(ctx, cam, roots, g, t);
-      drawSeed(g);
+      // roots: the taproot starts in the last moments of planting
+      drawRoots(ctx, cam, roots, planting ? -0.1 + 0.1 * invlerp(-0.2, 0, L) : g, t);
+      const pose = planting ? seedPose(q, ly) : { y: 34, rot: 0.28, sy: cam.oy + 34 * cam.s };
+      if (planting) drawBurrow(q, pose.y, env.amb);
+      if (pose.sy > -20) drawSeed(planting ? 0 : g, pose.y, pose.rot);
+      if (planting) drawPulse(q, cam.ox, pose.sy);
       const Ht = palm.trunkHeight(g);
-      palm.draw(ctx, cam, g, t, env);
-      const nodesAt = drawThread(g, Ht, ly);
+      if (!planting) palm.draw(ctx, cam, g, t, env);
+      const nodesAt = drawThread(g, Ht, pose.sy);
+      const cardVis = sCards.map((c, i) => ease.out(invlerp(0.66 + i * 0.05, 0.78 + i * 0.05, q)) * (1 - smoothstep(0, 0.045, Math.max(0, L))));
+      sCards.forEach((c) => (c.node = [cam.ox + c.world[0] * cam.s, cam.oy + c.world[1] * cam.s]));
+      drawProbes(cardVis, t);
 
       // --- UI layer ---
       const skyInk = mix(INK_LIGHT, INK_DARK, smoothstep(0.42, 0.62, luma(mix(env.sky[0], env.sky[1], 0.55))));
       root.style.setProperty('--sky-ink', rgba(skyInk));
       root.dataset.ink = rgba(skyInk);
 
-      const rv = invlerp(-0.5 * H, 0.03 * range, ly);
+      // 03 header + soil cards
+      const sv = Math.min(invlerp(-0.78, -0.6, L), 1 - invlerp(0, 0.035, L));
+      sHead.style.opacity = sv > 0 ? 1 : 0;
+      sRule.style.transform = `scaleX(${ease.out(invlerp(0, 0.4, sv))})`;
+      sHeadSqs.forEach((sq, i) => sq.setProgress(invlerp(i * 0.25, 0.5 + i * 0.25, sv)));
+      sCards.forEach((c, i) => {
+        const v = cardVis[i];
+        const leadPx = c.top - c.node[1];
+        c.el.style.opacity = v;
+        c.el.style.setProperty('--lead', `${Math.max(0, leadPx)}px`);
+        c.el.style.transform = `translate(${c.left}px, ${c.top + (1 - v) * 1.5 * (W / 120)}px)`;
+        c.el.querySelector('.s-card__lead').style.transform = `scaleY(${ease.out(invlerp(0.2, 0.8, v))})`;
+        c.sqs.forEach((sq) => sq.setProgress(invlerp(0.3, 1, v)));
+      });
+      const lit = Math.round(invlerp(0.2, 1, cardVis[0]) * 8);
+      cells.forEach((cell, i) => cell.classList.toggle('on', i < lit));
+      phArc.style.strokeDashoffset = 1 - ease.out(invlerp(0.1, 0.7, cardVis[1]));
+      phNeedle.style.transform = `rotate(${lerp(-78, 14, ease.out(invlerp(0.3, 1, cardVis[1])))}deg)`;
+      donut.forEach((d, i) => (d.style.strokeDashoffset = 1 - ease.out(invlerp(0.2 + i * 0.12, 0.6 + i * 0.12, cardVis[2]))));
+
+      // 04 growth UI takes over as the sprout breaks the surface
+      const rv = invlerp(0.02, 0.1, L);
+      head.style.opacity = rv > 0 ? 1 : 0;
       headRule.style.transform = `scaleX(${ease.out(invlerp(0, 0.4, rv))})`;
       hEyebrow.setProgress(invlerp(0.05, 0.45, rv));
       hTitle.setProgress(ease.inOutSine(invlerp(0.15, 0.85, rv)));

@@ -255,8 +255,19 @@ i[data-sq] {
 /* ---------- 01 hero ---------- */
 .hero {
   position: relative;
-  height: 100vh;
+  height: 420vh;
   background: var(--ajwa);
+}
+.hero__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+.hero__photo {
+  position: absolute;
+  inset: 0;
+  will-change: transform, filter, opacity;
 }
 .hero__bgclip {
   position: absolute;
@@ -336,11 +347,13 @@ i[data-sq] {
 }
 .hero__glint {
   position: absolute;
-  left: 35.6%;
-  top: 85.6%;
+  z-index: 4;
+  left: 0;
+  top: 0;
   width: 10rem;
   height: 10rem;
   margin: -5rem 0 0 -5rem;
+  pointer-events: none;
   background: radial-gradient(circle, #fff6dc 0, rgba(255, 226, 160, 0.9) 3.5%, rgba(246, 190, 100, 0.42) 11%, rgba(214, 150, 70, 0.14) 26%, transparent 55%);
   mix-blend-mode: screen;
 }
@@ -434,6 +447,164 @@ i[data-sq] {
   background: var(--gold);
 }
 
+/* ---------- 02 the date becomes the seed ---------- */
+.date__glow {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 90rem;
+  height: 80rem;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(190, 120, 52, 0.42), rgba(120, 66, 26, 0.16) 50%, transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+.date__orbit {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 62.5rem;
+  height: 20rem;
+  transform: translate(-50%, -50%) rotate(-11deg);
+  overflow: visible;
+  pointer-events: none;
+}
+.date__orbit ellipse {
+  fill: none;
+  stroke: var(--gold);
+}
+.date__orbit-ring {
+  stroke-width: 1.2;
+  stroke-dasharray: 1 2;
+  opacity: 0.6;
+}
+.date__orbit-ticks {
+  stroke-width: 6;
+  stroke-dasharray: 0.0015 0.0235;
+  opacity: 0.35;
+}
+.date__gl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.date__trail {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.date__trail path {
+  fill: none;
+  stroke-linecap: round;
+}
+.date__trail-glow {
+  stroke: rgba(226, 182, 96, 0.22);
+  stroke-width: 7;
+}
+.date__trail-core {
+  stroke: #f0cf86;
+  stroke-width: 1.6;
+}
+.date__lead {
+  stroke: rgba(240, 207, 134, 0.85);
+  stroke-width: 1.2;
+  stroke-dasharray: 1 2;
+}
+.date__lead-dot {
+  fill: #fff3cf;
+  filter: drop-shadow(0 0 6px rgba(255, 210, 120, 0.9));
+}
+.seedglyph__halo {
+  fill: rgba(255, 206, 120, 0.3);
+  filter: blur(7px);
+}
+.seedglyph__body {
+  fill: #a47b52;
+  stroke: rgba(52, 26, 10, 0.55);
+  stroke-width: 1;
+}
+.seedglyph__groove {
+  fill: none;
+  stroke: rgba(64, 34, 12, 0.85);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+}
+.date-ui {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: var(--cream);
+}
+.date-ui__left {
+  position: absolute;
+  left: var(--gutter);
+  top: 31vh;
+}
+.date-ui__left .eyebrow {
+  margin-bottom: 2rem;
+}
+.date-ui__body {
+  margin-top: 1.8rem;
+  color: rgba(232, 217, 189, 0.62);
+}
+.date-ui__specs {
+  position: absolute;
+  right: 8.5rem;
+  top: 30vh;
+  width: 19rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.date-ui__specs li {
+  display: flex;
+  gap: 1.2rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid rgba(200, 160, 79, 0.28);
+}
+.date-ui__specs li > span {
+  flex: none;
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--gold);
+}
+.date-ui__specs li div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.date-ui__specs li div > i:first-child {
+  color: var(--gold-hi);
+}
+.date-ui__specs li div > i + i {
+  color: rgba(232, 217, 189, 0.55);
+}
+.date-ui__callout {
+  position: absolute;
+  right: 9.5rem;
+  top: 27vh;
+  width: 17rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: rgba(232, 217, 189, 0.62);
+}
+.date-ui__tag {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--gold-hi);
+}
+.date-ui__tag > span {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 /* ---------- golden thread (document-level) ---------- */
 .thread {
   position: absolute;
@@ -491,7 +662,7 @@ i[data-sq] {
 /* ---------- 04 growth ---------- */
 .growth {
   position: relative;
-  height: 640vh;
+  height: 900vh;
   background: #04040a;
 }
 .growth__stage {
@@ -686,6 +857,127 @@ i[data-sq] {
   stroke: #c39540;
   stroke-width: 2;
   filter: drop-shadow(0 0 6px rgba(240, 180, 80, 0.9));
+}
+
+/* ---------- 03 planting: soil cards ---------- */
+.s-head {
+  position: absolute;
+  left: var(--gutter);
+  top: 23vh;
+  color: var(--sky-ink);
+}
+.s-head .eyebrow {
+  margin-bottom: 2rem;
+}
+.s-head__body {
+  margin-top: 1.8rem;
+  opacity: 0.7;
+}
+.s-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 15.5rem;
+  padding: 1.2rem 1.3rem 1.1rem;
+  border-radius: 1.1rem;
+  background: linear-gradient(160deg, rgba(40, 26, 16, 0.66), rgba(20, 12, 7, 0.52));
+  border: 1px solid rgba(200, 160, 79, 0.38);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--cream);
+  box-shadow: 0 1.2rem 3rem rgba(8, 4, 2, 0.35);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.s-card__lead {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 1px;
+  height: var(--lead, 4rem);
+  background: linear-gradient(to top, rgba(240, 207, 134, 0.9), rgba(240, 207, 134, 0.3));
+  transform-origin: bottom;
+}
+.s-card__head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--gold-hi);
+}
+.s-card__head > span {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+.s-card svg:not(.ic) {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 1rem 0 0.8rem;
+  overflow: visible;
+}
+.s-card > i {
+  opacity: 0.6;
+}
+.s-card__meter rect {
+  fill: rgba(247, 240, 227, 0.12);
+}
+.s-card__meter rect.on {
+  fill: #7fb6b2;
+}
+.s-card__gauge {
+  width: 72% !important;
+  margin: 0.9rem auto 0.6rem !important;
+}
+.s-card__gauge .arc {
+  fill: none;
+  stroke: url(#phGrad);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-dasharray: 1 2;
+}
+.s-card__gauge .needle {
+  stroke: var(--cream);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  transform-origin: 100px 84px;
+}
+.s-card__gauge .hub {
+  fill: var(--gold-hi);
+}
+.s-card__donut {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-top: 1rem;
+}
+.s-card__donut svg {
+  flex: none;
+  width: 5.4rem !important;
+  margin: 0 !important;
+}
+.s-card__donut .donut path {
+  fill: none;
+  stroke-width: 13;
+}
+.s-card__donut ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  opacity: 0.75;
+}
+.s-card__donut li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.s-card__donut b {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--c);
 }
 
 /* ---------- tail teaser ---------- */
