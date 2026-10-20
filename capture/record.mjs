@@ -52,7 +52,8 @@ try {
   const end = chore.keys[chore.keys.length - 1].t;
   const from = Number(arg('from', 0));
   const to = Math.min(Number(arg('to', end)), end);
-  const first = Math.round(from * fps), last = Math.round(to * fps);
+  // segment ends are exclusive (except the film's last frame) so segments concatenate cleanly
+  const first = Math.round(from * fps), last = Math.round(to * fps) - (to < end ? 1 : 0);
 
   await mkdir(path.dirname(out), { recursive: true });
   const ff = spawn('ffmpeg', [

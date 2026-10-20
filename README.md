@@ -35,12 +35,12 @@ cd site && npm install && npm run dev      # http://127.0.0.1:5173
 cd site && npm run build                   # the renderer serves the built site
 cd ../capture && npm install
 node stills.mjs                            # → storyboard/*.jpg  (node stills.mjs ../storyboard 1 png for PNG)
-node record.mjs --out ../out/film.mp4      # 1920×1080 @ 60fps
-node record.mjs --scale 2 --png --out ../out/film-4k.mp4   # 3840×2160
-node record.mjs --from 9 --to 15           # render part of the timeline
+./film.sh ../out/film.mp4                  # 1920×1080 @ 60fps, in resumable 10s segments
+./film.sh ../out/film-4k.mp4 10 --scale 2 --png   # 3840×2160
+node record.mjs --from 9 --to 15           # render one part of the timeline directly
 ```
 
-Every animation is a pure function of scroll position and a virtual clock, so renders are frame-exact and identical every time. To change the pacing, edit `capture/choreography.json`. You never need to re-record by hand. Keys name story beats rather than pixels: `{ "at": "hero", "p": 0.4 }` (hero + date scene), `{ "at": "growth", "q": 0.5 }` (planting), `{ "at": "growth", "g": 0.7 }` (growth), or `{ "at": "bridge", "offset": 0.4 }`. The page resolves them itself (`window.__zr.locate`).
+Every animation is a pure function of scroll position and a virtual clock, so renders are frame-exact and identical every time. If a render is interrupted, run `film.sh` again: finished segments in `out/parts/` are kept, and it resumes with the next one. To change the pacing, edit `capture/choreography.json`, then delete `out/parts/<name>/` so the segments re-render. You never need to re-record by hand. Keys name story beats rather than pixels: `{ "at": "hero", "p": 0.4 }` (hero + date scene), `{ "at": "growth", "q": 0.5 }` (planting), `{ "at": "growth", "g": 0.7 }` (growth), or `{ "at": "bridge", "offset": 0.4 }`. The page resolves them itself (`window.__zr.locate`).
 
 The 3D date renders through WebGL. Headless Chromium uses SwiftShader for this (the renderer passes `--enable-unsafe-swiftshader`), so frames in that scene take a little longer to capture.
 
