@@ -1,24 +1,166 @@
 {
   "fps": 60,
-  "notes": "Scroll keyframes: t = seconds into the video. Positions: {at: 'hero', p: 0..1} (hero + date scene), {at: 'growth', q: 0..1} (planting) or {g: 0..1} (growth), or {at: section, offset: viewport heights past its top}. Repeated positions hold still; motion between keys eases like a hand on a trackpad.",
+  "notes": "Scroll keyframes: t = seconds into the video. Positions: {at: 'hero', p} (hero + date scene), {at: 'growth', q} (planting) or {g} (growth), {at: 'water', w}, {at: 'ripen', p}, or {at: section id, offset: viewport heights past its top}. Repeated positions hold still; motion between keys eases like a hand on a trackpad.",
   "keys": [
-    { "t": 0, "at": "hero", "p": 0 },
-    { "t": 3.9, "at": "hero", "p": 0 },
-    { "t": 6.6, "at": "hero", "p": 0.3 },
-    { "t": 8.8, "at": "hero", "p": 0.47 },
-    { "t": 11.0, "at": "hero", "p": 0.7 },
-    { "t": 12.0, "at": "hero", "p": 0.8 },
-    { "t": 13.6, "at": "hero", "p": 1 },
-    { "t": 16.3, "at": "bridge", "offset": 0.4 },
-    { "t": 18.0, "at": "growth", "q": 0 },
-    { "t": 20.0, "at": "growth", "q": 0.3 },
-    { "t": 22.0, "at": "growth", "q": 0.6 },
-    { "t": 24.6, "at": "growth", "q": 0.95 },
-    { "t": 25.4, "at": "growth", "q": 1 },
-    { "t": 26.0, "at": "growth", "g": 0 },
-    { "t": 27.0, "at": "growth", "g": 0.035 },
-    { "t": 35.0, "at": "growth", "g": 0.62 },
-    { "t": 39.6, "at": "growth", "g": 1 },
-    { "t": 41.2, "at": "growth", "g": 1 }
+    {
+      "t": 0,
+      "at": "hero",
+      "p": 0
+    },
+    {
+      "t": 3.9,
+      "at": "hero",
+      "p": 0
+    },
+    {
+      "t": 6.6,
+      "at": "hero",
+      "p": 0.3
+    },
+    {
+      "t": 8.8,
+      "at": "hero",
+      "p": 0.47
+    },
+    {
+      "t": 11.0,
+      "at": "hero",
+      "p": 0.7
+    },
+    {
+      "t": 12.0,
+      "at": "hero",
+      "p": 0.8
+    },
+    {
+      "t": 13.6,
+      "at": "hero",
+      "p": 1
+    },
+    {
+      "t": 16.3,
+      "at": "bridge",
+      "offset": 0.4
+    },
+    {
+      "t": 18.0,
+      "at": "growth",
+      "q": 0
+    },
+    {
+      "t": 20.0,
+      "at": "growth",
+      "q": 0.3
+    },
+    {
+      "t": 22.0,
+      "at": "growth",
+      "q": 0.6
+    },
+    {
+      "t": 24.6,
+      "at": "growth",
+      "q": 0.95
+    },
+    {
+      "t": 25.4,
+      "at": "growth",
+      "q": 1
+    },
+    {
+      "t": 26.0,
+      "at": "growth",
+      "g": 0
+    },
+    {
+      "t": 27.0,
+      "at": "growth",
+      "g": 0.035
+    },
+    {
+      "t": 35.0,
+      "at": "growth",
+      "g": 0.62
+    },
+    {
+      "t": 39.6,
+      "at": "growth",
+      "g": 1
+    },
+    {
+      "t": 41.0,
+      "at": "growth",
+      "g": 1
+    },
+    {
+      "t": 44.4,
+      "at": "interlude-water",
+      "offset": 0.12
+    },
+    {
+      "t": 46.4,
+      "at": "water",
+      "w": 0
+    },
+    {
+      "t": 49.4,
+      "at": "water",
+      "w": 0.22
+    },
+    {
+      "t": 52.4,
+      "at": "water",
+      "w": 0.4
+    },
+    {
+      "t": 57.2,
+      "at": "water",
+      "w": 0.86
+    },
+    {
+      "t": 59.2,
+      "at": "water",
+      "w": 0.97
+    },
+    {
+      "t": 60.0,
+      "at": "water",
+      "w": 1
+    },
+    {
+      "t": 62.4,
+      "at": "ripen",
+      "p": 0
+    },
+    {
+      "t": 63.4,
+      "at": "ripen",
+      "p": 0.02
+    },
+    {
+      "t": 67.0,
+      "at": "ripen",
+      "p": 0.3333
+    },
+    {
+      "t": 71.0,
+      "at": "ripen",
+      "p": 0.6667
+    },
+    {
+      "t": 75.0,
+      "at": "ripen",
+      "p": 1
+    },
+    {
+      "t": 77.6,
+      "at": "interlude-harvest",
+      "offset": 0
+    },
+    {
+      "t": 79.4,
+      "at": "interlude-harvest",
+      "offset": 0
+    }
   ]
 }

@@ -2,12 +2,15 @@
 
 **Project plan & design flow** · v1
 
-> **Status:** All §9 decisions are locked to the defaults. **Phase 1 style frame: approved.** **Scenes 2 and 3 are built**, so scenes 1–4 now run as one film:
-> - The pinned hero pushes into the date, which becomes a real-time 3D Ajwa date, opens, and lets its seed fall.
-> - The seed rides the golden thread past the bridge statement.
-> - Planting and growth are one continuous pinned shot: night fall, landing, burrowing, and the soil probes and cards, then the sprout.
+> **Status:** All §9 decisions are locked to the defaults, and scenes 1–6 are built and run as one film:
+> - **01 Hero → 02 Date → seed:** the camera pushes into the date, a real-time 3D Ajwa date opens, and its seed falls along the golden thread.
+> - **03 Planting → 04 Growth:** one continuous pinned shot.
+> - **05 Water:** a drip line, wetting bulbs in the soil, and water climbing the roots and trunk into the crown.
+> - **06 Ripening:** a pinned horizontal section in which a 3D bunch ripens Kimri → Khalal → Rutab → Tamr.
 >
-> **Next:** 05 Water.
+> Interludes and the ripening section slide up over the pinned stage before them as rounded "sheets".
+>
+> **Next:** 07 Harvest.
 
 ---
 

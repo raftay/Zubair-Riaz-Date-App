@@ -4,39 +4,68 @@ import './styles.css';
 import { addScene, setLocator, start, docTop } from './engine.js';
 import { mountSquiggles } from './lib/squiggle.js';
 import { mountIcons } from './lib/icons.js';
-import { invlerp, ease, smoothstep } from './lib/math.js';
+import { invlerp, ease, smoothstep, hex, luma } from './lib/math.js';
 import { heroScene } from './scenes/hero.js';
 import { dateScene } from './scenes/date.js';
 import { threadScene } from './scenes/thread.js';
 import { growthScene } from './scenes/growth.js';
+import { waterScene } from './scenes/water.js';
+import { ripenScene } from './scenes/ripen.js';
 
 mountIcons();
 mountSquiggles();
 
 const hero = heroScene();
 const growth = growthScene();
+const water = waterScene();
+const ripen = ripenScene();
 addScene(hero);
 addScene(dateScene(hero));
 addScene(threadScene());
 addScene(growth);
+document.querySelectorAll('.interlude').forEach((el) => addScene(statementScene(el)));
+addScene(water);
+addScene(ripen);
 addScene(chrome());
 
+const locators = { hero, growth, water, ripen };
 setLocator((k) => {
-  if (k.at === 'hero') return hero.locate(k);
-  if (k.at === 'growth') return growth.locate(k);
+  if (locators[k.at] && k.offset === undefined) return locators[k.at].locate(k);
   return docTop(document.getElementById(k.at)) + (k.offset ?? 0) * innerHeight;
 });
 
 start();
 
-// Fixed page chrome: nav ink, chapter index, film grain, tail teaser.
+// A centred statement that writes itself as it rises into view.
+function statementScene(el) {
+  const inner = el.querySelector('.interlude__inner');
+  const mark = el.querySelector('.interlude__mark');
+  const [label, title] = [...el.querySelectorAll('[data-sq]')].map((e) => e._sq);
+  let top = 0, height = 0;
+  return {
+    resize() {
+      top = docTop(el);
+      height = el.offsetHeight;
+    },
+    update(s) {
+      const p = invlerp(0.95 * s.vh, 0.4 * s.vh, top + 0.35 * height - s.y);
+      mark.style.opacity = ease.out(invlerp(0, 0.4, p));
+      label.setProgress(invlerp(0.15, 0.5, p));
+      title.setProgress(ease.inOutSine(invlerp(0.3, 1, p)));
+      inner.style.transform = `translateY(${(1 - ease.out(p)) * 2}rem)`;
+    },
+  };
+}
+
+// Fixed page chrome: nav ink + bar, chapter index, film grain. Each section
+// declares data-ink / data-navbg / data-chapter (pinned scenes update theirs);
+// the section under the nav wins, the later one when a sheet overlaps.
 function chrome() {
   const html = document.documentElement;
   const dots = [...document.querySelectorAll('#chapters span')];
   const grain = document.getElementById('grain');
-  const tail = document.getElementById('tail');
-  const [tLabel, tTitle] = [...tail.querySelectorAll('[data-sq]')].map((e) => e._sq);
-  const tMark = tail.querySelector('.tail__mark');
+  const sections = [...document.querySelectorAll('[data-scene]')];
+  let spans = [];
 
   // 220px noise tile, generated once
   const c = document.createElement('canvas');
@@ -53,37 +82,33 @@ function chrome() {
   g.putImageData(img, 0, 0);
   grain.style.backgroundImage = `url(${c.toDataURL()})`;
 
-  let tailTop = 0, growthTop = 0;
+  const BARS = { dark: [18, 11, 8, 0.7], sand: [236, 220, 190, 0.78] };
+
   return {
     resize() {
-      tailTop = docTop(tail);
-      growthTop = docTop(document.getElementById('growth'));
+      spans = sections.map((el) => ({ el, top: docTop(el), bottom: docTop(el) + el.offsetHeight }));
     },
     update(s) {
       const H = s.vh;
-      const ink = growth.navInk(s);
-      const onTail = s.y > tailTop - 0.04 * H;
-      const navInk = onTail ? '#2a1a10' : ink || '#f7f0e3';
-      html.style.setProperty('--nav-ink', navInk);
-      // gold accent darkens on light backgrounds
-      const light = onTail || (ink && parseInt(ink.split(',')[0].slice(5), 10) < 120);
-      html.style.setProperty('--nav-accent', light ? '#8a6424' : '#c8a04f');
-      // frosted bar once content scrolls under the nav; clear over the pinned sky
       const navH = 0.0575 * H;
-      const dark = smoothstep(0.02, 0.14, s.y / H) * smoothstep(0, navH, growthTop - s.y);
-      const sand = 1 - smoothstep(0, navH, tailTop - s.y);
-      html.style.setProperty('--nav-bg', sand > 0 ? `rgba(236,220,190,${0.78 * sand})` : `rgba(18,11,8,${0.7 * dark})`);
-      const chapter = onTail ? 4 : s.y >= growthTop ? growth.chapter(s) : hero.progress(s) < 0.2 ? 0 : 1;
-      dots.forEach((d, i) => d.classList.toggle('is-on', i === chapter));
+      const probe = s.y + navH / 2;
+      let cur = spans[0];
+      for (const sp of spans) if (probe >= sp.top && probe < sp.bottom) cur = sp;
+      const d = cur.el.dataset;
+      const ink = d.ink || '#f7f0e3';
+      html.style.setProperty('--nav-ink', ink);
+      const light = luma(ink.startsWith('#') ? hex(ink) : ink.match(/\d+/g).slice(0, 3).map(Number)) < 0.5;
+      html.style.setProperty('--nav-accent', light ? '#8a6424' : '#c8a04f');
+      // frosted bar once content scrolls under the nav (fades in at the very top of the page)
+      const bar = BARS[d.navbg];
+      const a = bar ? bar[3] * (cur === spans[0] ? smoothstep(0.02, 0.14, s.y / H) : smoothstep(0, navH, s.y + navH - cur.top)) : 0;
+      html.style.setProperty('--nav-bg', bar ? `rgba(${bar[0]},${bar[1]},${bar[2]},${a})` : 'transparent');
+      const chapter = Number(d.chapter || 0);
+      dots.forEach((dot, i) => dot.classList.toggle('is-on', i === chapter));
 
       const f = Math.floor(s.t * 24);
       const h = (f * 2654435761) >>> 0;
       grain.style.backgroundPosition = `${h % 220}px ${(h >>> 8) % 220}px`;
-
-      const p = invlerp(0.95 * H, 0.4 * H, tailTop + 0.35 * tail.offsetHeight - s.y);
-      tMark.style.opacity = ease.out(invlerp(0, 0.4, p));
-      tLabel.setProgress(invlerp(0.15, 0.5, p));
-      tTitle.setProgress(ease.inOutSine(invlerp(0.3, 1, p)));
     },
   };
 }

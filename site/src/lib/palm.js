@@ -165,7 +165,10 @@ export class Palm {
     const born = this.fronds.filter((f) => f.birth < g);
     const oldest = born.length ? g - born[0].birth : 0;
     const tall = smoothstep(0, 220, H);
-    const eMax = lerp(1.2, 1.4, smoothstep(0.14, 0.4, g)) + 0.62 * tall;
+    // water reaching the crown lifts and brightens the fronds (scene 05)
+    const lift = env.frondLift || 0;
+    const frondAmb = lift ? env.amb.map((a) => a * (1 + 0.16 * lift)) : env.amb;
+    const eMax = lerp(1.2, 1.4, smoothstep(0.14, 0.4, g)) + 0.62 * tall - 0.16 * lift;
     const droopK = lerp(0.35, 1, tall);
     const Lg = lerp(46, 360, smoothstep(0.06, 0.85, g));
     const leaflets = Math.round(lerp(9, 46, smoothstep(0.08, 0.7, g)));
@@ -182,7 +185,7 @@ export class Palm {
         phi: f.phi,
         elev,
         len: Lg * f.lenK * smoothstep(0, 0.1, age),
-        droop: lerp(0.04, 0.34, rel) * f.droopK * droopK,
+        droop: lerp(0.04, 0.34, rel) * f.droopK * droopK * (1 - 0.3 * lift),
         unfurl: smoothstep(0.004, 0.06, age),
         leaflets,
         lm: 0.33,
@@ -190,7 +193,7 @@ export class Palm {
         lw: 1.2,
         age: smoothstep(0.55, 0.95, rel) * 0.8,
         light: env.light,
-        amb: env.amb,
+        amb: frondAmb,
         depth: lerp(0.62, 1.08, (z + 1) / 2),
         z,
       };
@@ -376,7 +379,7 @@ export class Palm {
           const dy = lerp(ey, sy + st.len * s, u);
           ctx.beginPath();
           ctx.ellipse(dx, dy, 3.3 * s, 4.9 * s, st.k * 0.4, 0, TAU);
-          ctx.fillStyle = rgba(tint(mix(hex('#E0A93A'), hex('#B4502A'), clamp((d / st.dates) * 0.5 + st.k * 0.6 + 0.25)), env.amb));
+          ctx.fillStyle = rgba(tint(mix(hex('#7a9236'), hex('#b3ae48'), clamp((d / st.dates) * 0.5 + st.k * 0.6 + 0.25)), env.amb));
           ctx.fill();
         }
       }
@@ -472,5 +475,35 @@ export function drawRoots(ctx, cam, roots, g, t, alpha = 1) {
     ctx.fillStyle = gr;
     ctx.fillRect(x - r * 2.4, y - r * 2.4, r * 4.8, r * 4.8);
   }
+  ctx.restore();
+}
+
+// Water drawn up the roots: teal pulses travelling from each root tip to the base.
+export function drawRootFlow(ctx, cam, roots, alpha, t) {
+  if (alpha <= 0) return;
+  const s = cam.s;
+  const ws = Math.sqrt(s);
+  ctx.save();
+  ctx.lineCap = 'round';
+  ctx.globalCompositeOperation = 'lighter';
+  roots.forEach((rt, ri) => {
+    const n = rt.pts.length - 1;
+    if (n < 4 || rt.w < 1.1) return; // main roots only
+    {
+      const head = 1 - (((t * 0.32 + ri * 0.137) % 1) + 1) % 1; // tip → base
+      const tail = Math.min(1, head + 0.16);
+      const a = Math.floor(head * n), b = Math.ceil(tail * n);
+      ctx.beginPath();
+      ctx.moveTo(cam.ox + rt.pts[a][0] * s, cam.oy + rt.pts[a][1] * s);
+      for (let i = a + 1; i <= b; i++) ctx.lineTo(cam.ox + rt.pts[i][0] * s, cam.oy + rt.pts[i][1] * s);
+      const fade = Math.sin(Math.PI * head);
+      ctx.strokeStyle = `rgba(70,190,184,${0.22 * alpha * fade})`;
+      ctx.lineWidth = rt.w * 6 * ws;
+      ctx.stroke();
+      ctx.strokeStyle = `rgba(120,226,218,${0.9 * alpha * fade})`;
+      ctx.lineWidth = Math.max(0.6, rt.w * 0.9 * ws);
+      ctx.stroke();
+    }
+  });
   ctx.restore();
 }

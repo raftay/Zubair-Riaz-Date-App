@@ -23,6 +23,17 @@ const SHOTS = [
   { name: '06-growth-young', at: 'growth', g: 0.46, t: 23.0 },
   { name: '07-growth-trunk', at: 'growth', g: 0.7, t: 24.5 },
   { name: '08-growth-mature', at: 'growth', g: 0.985, t: 26.0 },
+  { name: '09-interlude-water', at: 'interlude-water', offset: -0.45, t: 28.0 },
+  { name: '10a-water-drip', at: 'water', w: 0.12, t: 30.0 },
+  { name: '10b-water-roots', at: 'water', w: 0.3, t: 31.5 },
+  { name: '10c-water-trunk', at: 'water', w: 0.62, t: 33.0 },
+  { name: '10d-water-crown', at: 'water', w: 0.95, t: 35.0 },
+  { name: '11-ripen-enter', at: 'ripen', offset: -0.45, t: 36.0 },
+  { name: '11a-ripen-kimri', at: 'ripen', p: 0, t: 37.0 },
+  { name: '11b-ripen-khalal', at: 'ripen', p: 0.3333, t: 39.0 },
+  { name: '11c-ripen-rutab', at: 'ripen', p: 0.6667, t: 41.0 },
+  { name: '11d-ripen-tamr', at: 'ripen', p: 1, t: 43.0 },
+  { name: '12-harvest-teaser', at: 'interlude-harvest', offset: 0.05, t: 45.0 },
 ];
 
 await mkdir(out, { recursive: true });

@@ -97,6 +97,7 @@ export function heroScene() {
       const p = clamp((s.y - top) / range);
       if (s.y > top + range + H) return; // scrolled away
       const intro = (a, b, fn = ease.out) => fn(invlerp(a, b, t));
+      root.dataset.chapter = p < 0.2 ? 0 : 1;
 
       // --- intro reveal (virtual clock) ---
       glow.style.opacity = intro(0, 1.6);

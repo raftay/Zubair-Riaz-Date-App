@@ -33,12 +33,12 @@
     </header>
 
     <aside class="chapters" id="chapters">
-      <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
     </aside>
 
     <main>
       <!-- 01 · HERO  +  02 · THE DATE BECOMES THE SEED (one pinned stage) -->
-      <section class="hero" id="hero" data-scene>
+      <section class="hero" id="hero" data-scene data-ink="#f7f0e3" data-navbg="dark" data-chapter="0">
         <div class="hero__stage">
           <div class="hero__photo">
             <div class="hero__bgclip">
@@ -124,7 +124,7 @@
       </section>
 
       <!-- bridge into the journey (scenes 02–03 slot in here in the full film) -->
-      <section class="bridge" id="bridge" data-scene>
+      <section class="bridge" id="bridge" data-scene data-ink="#f7f0e3" data-navbg="dark" data-chapter="1">
         <div class="bridge__inner">
           <span class="bridge__mark" data-icon="seed"></span>
           <i data-sq="label" data-w="10" data-seed="41" data-align="center"></i>
@@ -133,7 +133,7 @@
       </section>
 
       <!-- 03 · PLANTING  +  04 · GROWTH (one continuous pinned shot) -->
-      <section class="growth" id="growth" data-scene>
+      <section class="growth" id="growth" data-scene data-cover data-navbg="none" data-chapter="2">
         <div class="growth__stage">
           <canvas class="growth__canvas"></canvas>
           <div class="growth__ui">
@@ -219,12 +219,119 @@
         </div>
       </section>
 
-      <!-- next chapter teaser (05 · Water slots in here) -->
-      <section class="tail" id="tail" data-scene>
-        <div class="tail__inner">
-          <span class="tail__mark" data-icon="drop"></span>
+      <!-- interlude: slides over the pinned growth stage -->
+      <section class="interlude sheet" id="interlude-water" data-scene data-ink="#2a1a10" data-navbg="sand" data-chapter="4">
+        <div class="interlude__inner">
+          <span class="interlude__mark" data-icon="drop"></span>
           <i data-sq="label" data-w="9" data-seed="81" data-align="center"></i>
           <i data-sq="title" data-w="34" data-lines="2" data-seed="82" data-align="center" data-last="0.6"></i>
+        </div>
+      </section>
+
+      <!-- 05 · WATER -->
+      <section class="water" id="water" data-scene data-cover data-ink="#2a1a10" data-navbg="none" data-chapter="4">
+        <div class="water__stage">
+          <canvas class="water__canvas"></canvas>
+          <div class="water__ui">
+            <div class="w-head w-head--a">
+              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="8.5" data-seed="201"></i></div>
+              <i data-sq="title" data-w="27" data-lines="2" data-seed="202" data-last="0.55"></i>
+              <i class="w-head__body" data-sq="body" data-w="22" data-lines="2" data-seed="203"></i>
+            </div>
+            <div class="w-head w-head--b">
+              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="8" data-seed="211"></i></div>
+              <i data-sq="title" data-w="26" data-lines="2" data-seed="212" data-last="0.5"></i>
+              <i class="w-head__body" data-sq="body" data-w="21" data-lines="2" data-seed="213"></i>
+            </div>
+            <div class="w-chip"><span data-icon="drop"></span><i data-sq="label" data-w="3.4" data-seed="221"></i></div>
+            <div class="w-chip"><span data-icon="drop"></span><i data-sq="label" data-w="3.8" data-seed="222"></i></div>
+            <div class="w-chip"><span data-icon="drop"></span><i data-sq="label" data-w="3.2" data-seed="223"></i></div>
+            <div class="w-chip"><span data-icon="drop"></span><i data-sq="label" data-w="3.6" data-seed="224"></i></div>
+            <div class="w-card" id="card-water">
+              <div class="w-card__head"><span data-icon="drop"></span><i data-sq="label" data-w="7" data-seed="231"></i></div>
+              <svg class="w-spark" viewBox="0 0 200 64">
+                <path class="area" />
+                <path class="line" pathLength="1" />
+                <circle class="dot" r="4.5" />
+              </svg>
+              <i data-sq="body" data-w="11.5" data-lines="1" data-seed="232"></i>
+            </div>
+            <div class="w-flow">
+              <span data-icon="drop"></span>
+              <i data-sq="label" data-w="5" data-seed="241"></i>
+              <span class="w-flow__bars"><b></b><b></b><b></b><b></b></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 · RIPENING (slides over the pinned water stage) -->
+      <section class="ripen sheet" id="ripen" data-scene data-cover data-ink="#2a1a10" data-navbg="none" data-chapter="5">
+        <div class="ripen__stage">
+          <canvas class="ripen__bg"></canvas>
+          <canvas class="ripen__gl"></canvas>
+          <div class="ripen__panels">
+            <article class="ripen__panel">
+              <span class="ripen__chip" style="--c: #6f8a33"></span>
+              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="7" data-seed="300"></i></div>
+              <i data-sq="display" data-w="25" data-lines="2" data-seed="301" data-last="0.5"></i>
+              <i class="ripen__body" data-sq="body" data-w="21" data-lines="3" data-seed="302"></i>
+              <ul class="ripen__meters">
+                <li><span data-icon="sun"></span><i data-sq="label" data-w="4.2" data-seed="303"></i><span class="ripen__meter"><b></b></span></li>
+                <li><span data-icon="drop"></span><i data-sq="label" data-w="4.6" data-seed="304"></i><span class="ripen__meter"><b></b></span></li>
+                <li><span data-icon="leaf"></span><i data-sq="label" data-w="3.8" data-seed="305"></i><span class="ripen__meter"><b></b></span></li>
+              </ul>
+            </article>
+            <article class="ripen__panel">
+              <span class="ripen__chip" style="--c: #e0ad3a"></span>
+              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="6.5" data-seed="310"></i></div>
+              <i data-sq="display" data-w="25" data-lines="2" data-seed="311" data-last="0.62"></i>
+              <i class="ripen__body" data-sq="body" data-w="21" data-lines="3" data-seed="312"></i>
+              <ul class="ripen__meters">
+                <li><span data-icon="sun"></span><i data-sq="label" data-w="4.2" data-seed="313"></i><span class="ripen__meter"><b></b></span></li>
+                <li><span data-icon="drop"></span><i data-sq="label" data-w="4.6" data-seed="314"></i><span class="ripen__meter"><b></b></span></li>
+                <li><span data-icon="leaf"></span><i data-sq="label" data-w="3.8" data-seed="315"></i><span class="ripen__meter"><b></b></span></li>
+              </ul>
+            </article>
+            <article class="ripen__panel">
+              <span class="ripen__chip" style="--c: #9a5a24"></span>
+              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="7.5" data-seed="320"></i></div>
+              <i data-sq="display" data-w="25" data-lines="2" data-seed="321" data-last="0.45"></i>
+              <i class="ripen__body" data-sq="body" data-w="21" data-lines="3" data-seed="322"></i>
+              <ul class="ripen__meters">
+                <li><span data-icon="sun"></span><i data-sq="label" data-w="4.2" data-seed="323"></i><span class="ripen__meter"><b></b></span></li>
+                <li><span data-icon="drop"></span><i data-sq="label" data-w="4.6" data-seed="324"></i><span class="ripen__meter"><b></b></span></li>
+                <li><span data-icon="leaf"></span><i data-sq="label" data-w="3.8" data-seed="325"></i><span class="ripen__meter"><b></b></span></li>
+              </ul>
+            </article>
+            <article class="ripen__panel">
+              <span class="ripen__chip" style="--c: #2a140c"></span>
+              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="6" data-seed="330"></i></div>
+              <i data-sq="display" data-w="25" data-lines="2" data-seed="331" data-last="0.58"></i>
+              <i class="ripen__body" data-sq="body" data-w="21" data-lines="3" data-seed="332"></i>
+              <ul class="ripen__meters">
+                <li><span data-icon="sun"></span><i data-sq="label" data-w="4.2" data-seed="333"></i><span class="ripen__meter"><b></b></span></li>
+                <li><span data-icon="drop"></span><i data-sq="label" data-w="4.6" data-seed="334"></i><span class="ripen__meter"><b></b></span></li>
+                <li><span data-icon="leaf"></span><i data-sq="label" data-w="3.8" data-seed="335"></i><span class="ripen__meter"><b></b></span></li>
+              </ul>
+            </article>
+          </div>
+          <div class="ripen__rail">
+            <div class="ripen__rail-line"><b></b></div>
+            <div class="ripen__node" style="--xf: 0; --c: #6f8a33"><span></span><i data-sq="label" data-w="4" data-seed="350"></i></div>
+            <div class="ripen__node" style="--xf: 0.3333; --c: #e0ad3a"><span></span><i data-sq="label" data-w="4.6" data-seed="351"></i></div>
+            <div class="ripen__node" style="--xf: 0.6667; --c: #9a5a24"><span></span><i data-sq="label" data-w="4.2" data-seed="352"></i></div>
+            <div class="ripen__node" style="--xf: 1; --c: #2a140c"><span></span><i data-sq="label" data-w="3.8" data-seed="353"></i></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- next chapter teaser (07 · Harvest slots in here) -->
+      <section class="interlude interlude--dark sheet" id="interlude-harvest" data-scene data-ink="#f7f0e3" data-navbg="dark" data-chapter="6">
+        <div class="interlude__inner">
+          <span class="interlude__mark" data-icon="basket"></span>
+          <i data-sq="label" data-w="9" data-seed="401" data-align="center"></i>
+          <i data-sq="title" data-w="34" data-lines="2" data-seed="402" data-align="center" data-last="0.55"></i>
         </div>
       </section>
     </main>

@@ -2,7 +2,7 @@
 
 A concept "website" for a premium date brand. It's built as a real scrolling page and rendered frame by frame into a video that looks like someone slowly scrolling down it. See [PLAN.md](PLAN.md) for the creative direction and scene-by-scene flow.
 
-**Current stage:** Scenes 1–4 are built: Hero → the date becomes the seed → planting → growth.
+**Current stage:** Scenes 1–6 are built: Hero → the date becomes the seed → planting → growth → water → ripening.
 
 ## Layout
 
@@ -11,9 +11,13 @@ site/        the concept site (Vite, vanilla JS, canvas + SVG; no copy, only squ
   src/engine.js        scroll/clock render loop + capture hooks (window.__zr)
   src/lib/squiggle.js  squiggle "type" that stands in for real text
   src/lib/palm.js      procedural date palm, fronds, roots
+  src/lib/landscape.js the palm's world: time-lapse sky, horizon, soil cross-section
   src/lib/date3d.js    3D Ajwa date + seed (three.js), opens in halves
+  src/lib/cluster3d.js 3D date bunch that ripens Kimri → Khalal → Rutab → Tamr
   src/scenes/          hero.js (01, pinned) · date.js (02, same stage) · thread.js (falling seed + bridge)
                        growth.js (03 planting + 04 growth, one continuous pinned shot)
+                       water.js (05) · ripen.js (06, horizontal panels)
+                       sections marked .sheet slide up over the pinned stage before them
   public/img/          Zubair cut-out (graded, upscaled)
 capture/     Playwright + ffmpeg renderer
   choreography.json    the "human scroll": time → position keyframes
@@ -40,9 +44,9 @@ node stills.mjs                            # → storyboard/*.jpg  (node stills.
 node record.mjs --from 9 --to 15           # render one part of the timeline directly
 ```
 
-Every animation is a pure function of scroll position and a virtual clock, so renders are frame-exact and identical every time. If a render is interrupted, run `film.sh` again: finished segments in `out/parts/` are kept, and it resumes with the next one. To change the pacing, edit `capture/choreography.json`, then delete `out/parts/<name>/` so the segments re-render. You never need to re-record by hand. Keys name story beats rather than pixels: `{ "at": "hero", "p": 0.4 }` (hero + date scene), `{ "at": "growth", "q": 0.5 }` (planting), `{ "at": "growth", "g": 0.7 }` (growth), or `{ "at": "bridge", "offset": 0.4 }`. The page resolves them itself (`window.__zr.locate`).
+Every animation is a pure function of scroll position and a virtual clock, so renders are frame-exact and identical every time. If a render is interrupted, run `film.sh` again: finished segments in `out/parts/` are kept, and it resumes with the next one. To change the pacing, edit `capture/choreography.json`, then delete `out/parts/<name>/` so the segments re-render. You never need to re-record by hand. Keys name story beats rather than pixels: `{ "at": "hero", "p": 0.4 }` (hero + date scene), `{ "at": "growth", "q": 0.5 }` (planting), `{ "at": "growth", "g": 0.7 }` (growth), `{ "at": "water", "w": 0.5 }`, `{ "at": "ripen", "p": 0.5 }`, or `{ "at": "bridge", "offset": 0.4 }`. The page resolves them itself (`window.__zr.locate`).
 
-The 3D date renders through WebGL. Headless Chromium uses SwiftShader for this (the renderer passes `--enable-unsafe-swiftshader`), so frames in that scene take a little longer to capture.
+The 3D date and date bunch render through WebGL. Headless Chromium uses SwiftShader for this (the renderer passes `--enable-unsafe-swiftshader`), so frames in that scene take a little longer to capture.
 
 ## Photo
 
