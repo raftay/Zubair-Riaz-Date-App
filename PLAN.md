@@ -1,6 +1,8 @@
 # Zubair Riaz Premium Dates — Scroll Concept Film
 
-**Project plan & design flow** · v1 · for review before build starts
+**Project plan & design flow** · v1
+
+> **Status:** All §9 decisions are locked to the defaults: public placeholder photo, illustrated/3D style, wordmark as the only real text, 1080p preview → 4K final, full-bleed framing, ~90s, Madinah Ajwa angle. **Phase 1 (style frame) is built:** the Hero, a bridge statement, and the Growth scene, rendered as stills (`storyboard/`) plus a motion preview. It's waiting on look approval before Phase 2.
 
 ---
 
