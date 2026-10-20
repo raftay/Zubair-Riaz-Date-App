@@ -216,6 +216,24 @@ const seedTex = () =>
     }
   });
 
+// The closed Ajwa date from scene 02, as a plain mesh (2 units long, y-up).
+export function ajwaDate() {
+  return new THREE.Mesh(
+    dateGeometry(),
+    new THREE.MeshPhysicalMaterial({
+      map: skinColor(),
+      bumpMap: skinBump(),
+      bumpScale: 1.3,
+      roughness: 0.6,
+      clearcoat: 0.38,
+      clearcoatRoughness: 0.42,
+      sheen: 0.6,
+      sheenRoughness: 0.45,
+      sheenColor: new THREE.Color('#8f4a26'),
+    }),
+  );
+}
+
 export class Date3D {
   constructor(canvas) {
     this.canvas = canvas;

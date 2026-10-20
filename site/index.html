@@ -219,17 +219,8 @@
         </div>
       </section>
 
-      <!-- interlude: slides over the pinned growth stage -->
-      <section class="interlude sheet" id="interlude-water" data-scene data-ink="#2a1a10" data-navbg="sand" data-chapter="4">
-        <div class="interlude__inner">
-          <span class="interlude__mark" data-icon="drop"></span>
-          <i data-sq="label" data-w="9" data-seed="81" data-align="center"></i>
-          <i data-sq="title" data-w="34" data-lines="2" data-seed="82" data-align="center" data-last="0.6"></i>
-        </div>
-      </section>
-
-      <!-- 05 · WATER -->
-      <section class="water" id="water" data-scene data-cover data-ink="#2a1a10" data-navbg="none" data-chapter="4">
+      <!-- 05 · WATER (slides over the pinned growth stage) -->
+      <section class="water sheet" id="water" data-scene data-cover data-ink="#2a1a10" data-navbg="none" data-chapter="4">
         <div class="water__stage">
           <canvas class="water__canvas"></canvas>
           <div class="water__ui">
@@ -326,12 +317,45 @@
         </div>
       </section>
 
-      <!-- next chapter teaser (07 · Harvest slots in here) -->
-      <section class="interlude interlude--dark sheet" id="interlude-harvest" data-scene data-ink="#f7f0e3" data-navbg="dark" data-chapter="6">
-        <div class="interlude__inner">
-          <span class="interlude__mark" data-icon="basket"></span>
-          <i data-sq="label" data-w="9" data-seed="401" data-align="center"></i>
-          <i data-sq="title" data-w="34" data-lines="2" data-seed="402" data-align="center" data-last="0.55"></i>
+      <!-- 07 · HARVEST + 08 · PACKAGING (one studio shot; slides over ripening) -->
+      <section class="harvest sheet" id="harvest" data-scene data-ink="#f7f0e3" data-navbg="none" data-chapter="6">
+        <div class="harvest__stage">
+          <canvas class="harvest__bg"></canvas>
+          <canvas class="harvest__gl"></canvas>
+          <svg class="harvest__lines">
+            <path class="h-lead" pathLength="1" />
+            <circle class="h-lead-dot" r="4" />
+          </svg>
+          <span class="h-flash"></span>
+          <div class="harvest__ui">
+            <div class="h-head h-head--a">
+              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="8" data-seed="501"></i></div>
+              <i data-sq="display" data-w="26" data-lines="2" data-seed="502" data-last="0.5"></i>
+              <i class="h-head__body" data-sq="body" data-w="21" data-lines="2" data-seed="503"></i>
+            </div>
+            <div class="h-inspect">
+              <div class="h-inspect__head"><span data-icon="search"></span><i data-sq="label" data-w="7" data-seed="511"></i></div>
+              <ul>
+                <li><span data-icon="ruler"></span><i data-sq="label" data-w="6.2" data-seed="512"></i><svg class="check" viewBox="0 0 20 20"><path d="M4 10.5l4 4 8-9" pathLength="1" /></svg></li>
+                <li><span data-icon="drop"></span><i data-sq="label" data-w="5.4" data-seed="513"></i><svg class="check" viewBox="0 0 20 20"><path d="M4 10.5l4 4 8-9" pathLength="1" /></svg></li>
+                <li><span data-icon="sun"></span><i data-sq="label" data-w="6.6" data-seed="514"></i><svg class="check" viewBox="0 0 20 20"><path d="M4 10.5l4 4 8-9" pathLength="1" /></svg></li>
+              </ul>
+              <div class="h-batch"><svg class="barcode" viewBox="0 0 120 30" preserveAspectRatio="none"></svg><i data-sq="label" data-w="5" data-seed="515"></i></div>
+            </div>
+            <div class="h-head h-head--b">
+              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="8.5" data-seed="521"></i></div>
+              <i data-sq="display" data-w="25" data-lines="2" data-seed="522" data-last="0.55"></i>
+              <i class="h-head__body" data-sq="body" data-w="20" data-lines="2" data-seed="523"></i>
+            </div>
+            <div class="h-cta">
+              <i data-sq="label" data-w="7" data-seed="531"></i>
+              <i class="h-cta__price" data-sq="title" data-w="9" data-seed="532"></i>
+              <div class="h-cta__row">
+                <span class="h-qty"><span data-icon="minus"></span><i data-sq="label" data-w="1.2" data-seed="533"></i><span data-icon="plus"></span></span>
+                <a class="btn btn--gold"><i data-sq="label" data-w="6.5" data-seed="534"></i><span data-icon="bag"></span></a>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>

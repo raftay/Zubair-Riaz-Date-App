@@ -2,15 +2,16 @@
 
 **Project plan & design flow** · v1
 
-> **Status:** All §9 decisions are locked to the defaults, and scenes 1–6 are built and run as one film:
+> **Status:** All §9 decisions are locked to the defaults, and scenes 1–8 are built and run as one 64s film:
 > - **01 Hero → 02 Date → seed:** the camera pushes into the date, a real-time 3D Ajwa date opens, and its seed falls along the golden thread.
 > - **03 Planting → 04 Growth:** one continuous pinned shot.
 > - **05 Water:** a drip line, wetting bulbs in the soil, and water climbing the roots and trunk into the crown.
 > - **06 Ripening:** a pinned horizontal section in which a 3D bunch ripens Kimri → Khalal → Rutab → Tamr.
+> - **07 Harvest → 08 Packaging:** one pinned 3D studio shot. A sickle cuts the bunch into a woven basket, one Ajwa is lifted out and inspected, then it flies into the gift box, which closes, is ribboned, sealed, tagged and turned to the light.
 >
-> Interludes and the ripening section slide up over the pinned stage before them as rounded "sheets".
+> Each section from Water onward slides up over the pinned stage before it as a rounded "sheet". The two interludes were cut and every scene was tightened, so scenes 1–6 now run 47s instead of 79s.
 >
-> **Next:** 07 Harvest.
+> **Next:** 09 Shipping.
 
 ---
 
@@ -101,21 +102,21 @@ Each squiggle **draws itself on** (a stroke animation) as its section scrolls in
 
 ## 4. Design flow, scene by scene
 
-Times are approximate, from a target total of about 90s. Pacing is set later in one config file (see §5).
+Times for scenes 1–8 match the current render; 9–11 are targets. The film was tightened from the original ~90s target and should now land around 85s in total. All pacing lives in one config file (see §5).
 
 | # | Scene | Time | Behaviour |
 |---|---|---|---|
-| 1 | Hero: Zubair with the date | 0:00–0:07 | Static, then parallax |
-| 2 | Date → seed transition | 0:07–0:12 | Pinned zoom |
-| 3 | Planting: the soil | 0:12–0:20 | Pinned |
-| 4 | Growth: the palm rises | 0:20–0:31 | Pinned (long) |
-| 5 | Water | 0:31–0:39 | Scroll-through |
-| 6 | Ripening: 4 stages | 0:39–0:50 | Pinned horizontal scroll |
-| 7 | Harvest & hand-selection | 0:50–0:58 | Scroll-through |
-| 8 | Packaging: the box | 0:58–1:07 | Pinned |
-| 9 | Shipping: the globe | 1:07–1:17 | Pinned |
-| 10 | Traceability: scan your box | 1:17–1:24 | Scroll-through |
-| 11 | Collection, Zubair's sign-off, footer | 1:24–1:35 | Scroll-through, final hold |
+| 1 | Hero: Zubair with the date | 0:00–0:04 | Static, then parallax |
+| 2 | Date → seed transition | 0:04–0:13 | Pinned zoom, then the falling seed |
+| 3 | Planting: the soil | 0:13–0:19 | Pinned |
+| 4 | Growth: the palm rises | 0:19–0:28 | Pinned (long) |
+| 5 | Water | 0:28–0:38 | Pinned sheet |
+| 6 | Ripening: 4 stages | 0:38–0:47 | Pinned horizontal scroll |
+| 7 | Harvest & hand-selection | 0:47–0:57 | Pinned 3D studio (one shot with 8) |
+| 8 | Packaging: the box | 0:57–1:04 | Pinned 3D studio |
+| 9 | Shipping: the globe | 1:04–1:13 | Pinned |
+| 10 | Traceability: scan your box | 1:13–1:19 | Scroll-through |
+| 11 | Collection, Zubair's sign-off, footer | 1:19–1:26 | Scroll-through, final hold |
 
 ### Scene 1: Hero (Zubair holding a date)
 - **Layout:** full-screen, Ajwa Black background with a warm spotlight. Zubair is cut out from his photo background and stands on the right two-thirds, holding a single glossy date toward the camera. A large `display` squiggle (the headline) and a `body` squiggle sit on the left, with a gold `button` below them.

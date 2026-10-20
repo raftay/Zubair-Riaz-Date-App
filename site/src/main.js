@@ -4,13 +4,14 @@ import './styles.css';
 import { addScene, setLocator, start, docTop } from './engine.js';
 import { mountSquiggles } from './lib/squiggle.js';
 import { mountIcons } from './lib/icons.js';
-import { invlerp, ease, smoothstep, hex, luma } from './lib/math.js';
+import { smoothstep, hex, luma } from './lib/math.js';
 import { heroScene } from './scenes/hero.js';
 import { dateScene } from './scenes/date.js';
 import { threadScene } from './scenes/thread.js';
 import { growthScene } from './scenes/growth.js';
 import { waterScene } from './scenes/water.js';
 import { ripenScene } from './scenes/ripen.js';
+import { harvestScene } from './scenes/harvest.js';
 
 mountIcons();
 mountSquiggles();
@@ -19,43 +20,23 @@ const hero = heroScene();
 const growth = growthScene();
 const water = waterScene();
 const ripen = ripenScene();
+const harvest = harvestScene();
 addScene(hero);
 addScene(dateScene(hero));
 addScene(threadScene());
 addScene(growth);
-document.querySelectorAll('.interlude').forEach((el) => addScene(statementScene(el)));
 addScene(water);
 addScene(ripen);
+addScene(harvest);
 addScene(chrome());
 
-const locators = { hero, growth, water, ripen };
+const locators = { hero, growth, water, ripen, harvest };
 setLocator((k) => {
   if (locators[k.at] && k.offset === undefined) return locators[k.at].locate(k);
   return docTop(document.getElementById(k.at)) + (k.offset ?? 0) * innerHeight;
 });
 
 start();
-
-// A centred statement that writes itself as it rises into view.
-function statementScene(el) {
-  const inner = el.querySelector('.interlude__inner');
-  const mark = el.querySelector('.interlude__mark');
-  const [label, title] = [...el.querySelectorAll('[data-sq]')].map((e) => e._sq);
-  let top = 0, height = 0;
-  return {
-    resize() {
-      top = docTop(el);
-      height = el.offsetHeight;
-    },
-    update(s) {
-      const p = invlerp(0.95 * s.vh, 0.4 * s.vh, top + 0.35 * height - s.y);
-      mark.style.opacity = ease.out(invlerp(0, 0.4, p));
-      label.setProgress(invlerp(0.15, 0.5, p));
-      title.setProgress(ease.inOutSine(invlerp(0.3, 1, p)));
-      inner.style.transform = `translateY(${(1 - ease.out(p)) * 2}rem)`;
-    },
-  };
-}
 
 // Fixed page chrome: nav ink + bar, chapter index, film grain. Each section
 // declares data-ink / data-navbg / data-chapter (pinned scenes update theirs);

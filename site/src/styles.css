@@ -981,8 +981,7 @@ i[data-sq] {
 }
 
 /* ---------- sheets: sections that slide up over a pinned stage ---------- */
-.growth,
-.water {
+.growth {
   position: relative;
   z-index: 1;
 }
@@ -997,43 +996,8 @@ i[data-sq] {
 .ripen {
   z-index: 3;
 }
-#interlude-harvest {
+.harvest {
   z-index: 4;
-}
-
-/* ---------- interludes ---------- */
-.interlude {
-  height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(to bottom, #ecd8b4, var(--sand) 70%, #c9b28f);
-  color: #2a1a10;
-}
-.interlude--dark {
-  height: 100vh;
-  background: radial-gradient(ellipse 70% 60% at 50% 45%, #2b1a10, var(--ajwa) 70%);
-  color: var(--cream);
-}
-.interlude__inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.6rem;
-}
-.interlude__mark {
-  width: 2.6rem;
-  height: 2.6rem;
-  color: var(--teal);
-}
-.interlude--dark .interlude__mark {
-  color: var(--gold);
-}
-.interlude__inner > i:nth-of-type(1) {
-  color: var(--gold-lo);
-}
-.interlude--dark .interlude__inner > i:nth-of-type(1) {
-  color: var(--gold);
 }
 
 /* ---------- 05 water ---------- */
@@ -1312,4 +1276,171 @@ i[data-sq] {
 .ripen__node.is-on > span {
   transform: scale(1);
   box-shadow: 0 0 0 0.3rem rgba(255, 255, 255, 0.7), 0 0 1.2rem rgba(255, 200, 120, 0.6);
+}
+
+/* ---------- 07–08 harvest + packaging ---------- */
+.harvest {
+  height: 640vh;
+  background: #0e0805;
+}
+.harvest__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+.harvest__bg,
+.harvest__gl,
+.harvest__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.harvest__lines {
+  overflow: visible;
+}
+.h-lead {
+  fill: none;
+  stroke: rgba(240, 207, 134, 0.85);
+  stroke-width: 1.2;
+  stroke-dasharray: 1 2;
+}
+.h-lead-dot {
+  fill: #fff3cf;
+  filter: drop-shadow(0 0 6px rgba(255, 210, 120, 0.9));
+}
+.h-flash {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 22rem;
+  height: 0.5rem;
+  margin: -0.25rem 0 0 -11rem;
+  border-radius: 1rem;
+  background: linear-gradient(90deg, transparent, rgba(255, 236, 190, 0.9) 40%, #fffaf0 50%, rgba(255, 236, 190, 0.9) 60%, transparent);
+  box-shadow: 0 0 2.4rem 0.6rem rgba(255, 210, 130, 0.55);
+  opacity: 0;
+  pointer-events: none;
+}
+.harvest__ui {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: var(--cream);
+}
+.h-head {
+  position: absolute;
+  left: var(--gutter);
+  top: 22vh;
+}
+.h-head .eyebrow {
+  margin-bottom: 2rem;
+}
+.h-head__body {
+  margin-top: 1.8rem;
+  color: rgba(232, 217, 189, 0.62);
+}
+.h-inspect {
+  position: absolute;
+  right: 9rem;
+  top: 27vh;
+  width: 19rem;
+  padding: 1.4rem 1.5rem 1.3rem;
+  border-radius: 1.2rem;
+  background: linear-gradient(160deg, rgba(48, 32, 20, 0.62), rgba(20, 12, 7, 0.52));
+  border: 1px solid rgba(200, 160, 79, 0.42);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 1.4rem 3.4rem rgba(0, 0, 0, 0.4);
+  opacity: 0;
+}
+.h-inspect__head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--gold-hi);
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(200, 160, 79, 0.25);
+}
+.h-inspect__head > span {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+.h-inspect ul {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+}
+.h-inspect li {
+  display: grid;
+  grid-template-columns: 1.3rem 1fr 1.3rem;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(200, 160, 79, 0.14);
+  color: rgba(232, 217, 189, 0.8);
+}
+.h-inspect li > span {
+  width: 1.3rem;
+  height: 1.3rem;
+  color: var(--gold);
+}
+.check {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+.check path {
+  fill: none;
+  stroke: #9fd18a;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 2;
+}
+.h-batch {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 1.1rem;
+  color: rgba(232, 217, 189, 0.7);
+}
+.barcode {
+  width: 6.2rem;
+  height: 1.7rem;
+  fill: var(--cream);
+  opacity: 0.85;
+}
+.h-cta {
+  position: absolute;
+  right: 9rem;
+  top: 30vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.3rem;
+  color: var(--cream);
+}
+.h-cta > i:first-child {
+  color: var(--gold);
+}
+.h-cta__row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+.h-qty {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  height: 3.7rem;
+  padding: 0 1.2rem;
+  border-radius: 99rem;
+  border: 1px solid rgba(200, 160, 79, 0.6);
+}
+.h-qty > span {
+  width: 1rem;
+  height: 1rem;
 }

@@ -23,7 +23,7 @@ const SHOTS = [
   { name: '06-growth-young', at: 'growth', g: 0.46, t: 23.0 },
   { name: '07-growth-trunk', at: 'growth', g: 0.7, t: 24.5 },
   { name: '08-growth-mature', at: 'growth', g: 0.985, t: 26.0 },
-  { name: '09-interlude-water', at: 'interlude-water', offset: -0.45, t: 28.0 },
+  { name: '09-water-enter', at: 'water', offset: -0.45, t: 28.0 },
   { name: '10a-water-drip', at: 'water', w: 0.12, t: 30.0 },
   { name: '10b-water-roots', at: 'water', w: 0.3, t: 31.5 },
   { name: '10c-water-trunk', at: 'water', w: 0.62, t: 33.0 },
@@ -33,7 +33,15 @@ const SHOTS = [
   { name: '11b-ripen-khalal', at: 'ripen', p: 0.3333, t: 39.0 },
   { name: '11c-ripen-rutab', at: 'ripen', p: 0.6667, t: 41.0 },
   { name: '11d-ripen-tamr', at: 'ripen', p: 1, t: 43.0 },
-  { name: '12-harvest-teaser', at: 'interlude-harvest', offset: 0.05, t: 45.0 },
+  { name: '12-harvest-enter', at: 'harvest', offset: -0.45, t: 44.0 },
+  { name: '12a-harvest-bunch', at: 'harvest', h: 0.05, t: 45.0 },
+  { name: '12b-harvest-cut', at: 'harvest', h: 0.116, t: 45.6 },
+  { name: '12c-harvest-basket', at: 'harvest', h: 0.24, t: 46.4 },
+  { name: '12d-harvest-inspect', at: 'harvest', h: 0.46, t: 48.0 },
+  { name: '13a-box-fill', at: 'harvest', h: 0.67, t: 49.5 },
+  { name: '13b-box-close', at: 'harvest', h: 0.8, t: 50.5 },
+  { name: '13c-box-sealed', at: 'harvest', h: 0.9, t: 51.5 },
+  { name: '13d-box-final', at: 'harvest', h: 1, t: 53.0 },
 ];
 
 await mkdir(out, { recursive: true });

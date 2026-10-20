@@ -1,6 +1,6 @@
 {
   "fps": 60,
-  "notes": "Scroll keyframes: t = seconds into the video. Positions: {at: 'hero', p} (hero + date scene), {at: 'growth', q} (planting) or {g} (growth), {at: 'water', w}, {at: 'ripen', p}, or {at: section id, offset: viewport heights past its top}. Repeated positions hold still; motion between keys eases like a hand on a trackpad.",
+  "notes": "Scroll keyframes: t = seconds into the video. Positions: {at: 'hero', p} (hero + date scene), {at: 'growth', q} (planting) or {g} (growth), {at: 'water', w}, {at: 'ripen', p}, {at: 'harvest', h} (harvest + packaging), or {at: section id, offset: viewport heights past its top}. Between the last key of one pinned scene and the first of the next, the next section slides up as a sheet. Repeated positions hold still; motion between keys eases like a hand on a trackpad.",
   "keys": [
     {
       "t": 0,
@@ -8,159 +8,189 @@
       "p": 0
     },
     {
-      "t": 3.9,
+      "t": 3.0,
       "at": "hero",
       "p": 0
     },
     {
-      "t": 6.6,
+      "t": 5.2,
       "at": "hero",
       "p": 0.3
     },
     {
-      "t": 8.8,
+      "t": 6.9,
       "at": "hero",
       "p": 0.47
     },
     {
-      "t": 11.0,
+      "t": 8.6,
       "at": "hero",
       "p": 0.7
     },
     {
-      "t": 12.0,
+      "t": 9.4,
       "at": "hero",
       "p": 0.8
     },
     {
-      "t": 13.6,
+      "t": 10.6,
       "at": "hero",
       "p": 1
     },
     {
-      "t": 16.3,
+      "t": 12.5,
       "at": "bridge",
       "offset": 0.4
     },
     {
-      "t": 18.0,
+      "t": 13.8,
       "at": "growth",
       "q": 0
     },
     {
-      "t": 20.0,
+      "t": 15.2,
       "at": "growth",
       "q": 0.3
     },
     {
-      "t": 22.0,
+      "t": 16.6,
       "at": "growth",
       "q": 0.6
     },
     {
-      "t": 24.6,
+      "t": 18.2,
       "at": "growth",
       "q": 0.95
     },
     {
-      "t": 25.4,
+      "t": 18.7,
       "at": "growth",
       "q": 1
     },
     {
-      "t": 26.0,
+      "t": 19.1,
       "at": "growth",
       "g": 0
     },
     {
-      "t": 27.0,
+      "t": 19.8,
       "at": "growth",
       "g": 0.035
     },
     {
-      "t": 35.0,
+      "t": 25.0,
       "at": "growth",
       "g": 0.62
     },
     {
-      "t": 39.6,
+      "t": 27.8,
       "at": "growth",
       "g": 1
     },
     {
-      "t": 41.0,
+      "t": 28.3,
       "at": "growth",
       "g": 1
     },
     {
-      "t": 44.4,
-      "at": "interlude-water",
-      "offset": 0.12
-    },
-    {
-      "t": 46.4,
+      "t": 30.0,
       "at": "water",
       "w": 0
     },
     {
-      "t": 49.4,
+      "t": 31.8,
       "at": "water",
       "w": 0.22
     },
     {
-      "t": 52.4,
+      "t": 33.6,
       "at": "water",
       "w": 0.4
     },
     {
-      "t": 57.2,
+      "t": 36.6,
       "at": "water",
       "w": 0.86
     },
     {
-      "t": 59.2,
+      "t": 37.6,
       "at": "water",
       "w": 0.97
     },
     {
-      "t": 60.0,
+      "t": 38.1,
       "at": "water",
       "w": 1
     },
     {
-      "t": 62.4,
+      "t": 39.7,
       "at": "ripen",
       "p": 0
     },
     {
-      "t": 63.4,
+      "t": 40.2,
       "at": "ripen",
       "p": 0.02
     },
     {
-      "t": 67.0,
+      "t": 42.6,
       "at": "ripen",
       "p": 0.3333
     },
     {
-      "t": 71.0,
+      "t": 45.0,
       "at": "ripen",
       "p": 0.6667
     },
     {
-      "t": 75.0,
+      "t": 47.4,
       "at": "ripen",
       "p": 1
     },
     {
-      "t": 77.6,
-      "at": "interlude-harvest",
-      "offset": 0
+      "t": 49.0,
+      "at": "harvest",
+      "h": 0
     },
     {
-      "t": 79.4,
-      "at": "interlude-harvest",
-      "offset": 0
+      "t": 51.3,
+      "at": "harvest",
+      "h": 0.12
+    },
+    {
+      "t": 53.4,
+      "at": "harvest",
+      "h": 0.27
+    },
+    {
+      "t": 54.5,
+      "at": "harvest",
+      "h": 0.36
+    },
+    {
+      "t": 56.8,
+      "at": "harvest",
+      "h": 0.56
+    },
+    {
+      "t": 58.8,
+      "at": "harvest",
+      "h": 0.73
+    },
+    {
+      "t": 61.2,
+      "at": "harvest",
+      "h": 0.9
+    },
+    {
+      "t": 62.6,
+      "at": "harvest",
+      "h": 1
+    },
+    {
+      "t": 64.0,
+      "at": "harvest",
+      "h": 1
     }
   ]
 }
