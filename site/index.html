@@ -41,6 +41,7 @@
       <section class="hero" id="hero" data-scene data-ink="#f7f0e3" data-navbg="dark" data-chapter="0">
         <div class="hero__stage">
           <div class="hero__photo">
+            <img class="hero__plate" src="/img/zubair-plate.webp" alt="" />
             <div class="hero__bgclip">
               <div class="hero__bg">
                 <canvas class="hero__fronds"></canvas>
@@ -52,7 +53,7 @@
                 </svg>
               </div>
             </div>
-            <div class="hero__person"><img src="/img/zubair.webp" alt="" /></div>
+            <div class="hero__person"><img src="/img/zubair-person.webp" alt="" /></div>
           </div>
           <div class="date__glow"></div>
           <canvas class="hero__dust"></canvas>
@@ -65,8 +66,6 @@
           <svg class="date__trail">
             <path class="date__trail-glow" />
             <path class="date__trail-core" />
-            <path class="date__lead" pathLength="1" />
-            <circle class="date__lead-dot" r="4" />
             <g class="seedglyph">
               <circle class="seedglyph__halo" r="22" />
               <ellipse class="seedglyph__body" rx="7.1" ry="14.4" />
@@ -103,19 +102,6 @@
             </ul>
           </div>
 
-          <!-- inside the date: the seed -->
-          <div class="date-ui date-ui--inside">
-            <div class="date-ui__left">
-              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="8" data-seed="151"></i></div>
-              <i data-sq="display" data-w="25" data-lines="2" data-seed="152" data-last="0.5"></i>
-              <i class="date-ui__body" data-sq="body" data-w="20" data-lines="2" data-seed="153"></i>
-            </div>
-            <div class="date-ui__callout">
-              <div class="date-ui__tag"><span data-icon="seed"></span><i data-sq="label" data-w="6" data-seed="154"></i></div>
-              <i data-sq="body" data-w="13" data-lines="2" data-seed="155"></i>
-            </div>
-          </div>
-
           <div class="hero__cue">
             <span class="mouse"><b></b></span>
             <i data-sq="label" data-w="5" data-seed="39"></i>
@@ -123,14 +109,8 @@
         </div>
       </section>
 
-      <!-- bridge into the journey (scenes 02–03 slot in here in the full film) -->
-      <section class="bridge" id="bridge" data-scene data-ink="#f7f0e3" data-navbg="dark" data-chapter="1">
-        <div class="bridge__inner">
-          <span class="bridge__mark" data-icon="seed"></span>
-          <i data-sq="label" data-w="10" data-seed="41" data-align="center"></i>
-          <i data-sq="display" data-w="50" data-lines="3" data-seed="42" data-align="center" data-last="0.55"></i>
-        </div>
-      </section>
+      <!-- the seed falls through the dark on the golden thread -->
+      <section class="bridge" id="bridge" data-scene data-ink="#f7f0e3" data-navbg="dark" data-chapter="1"></section>
 
       <!-- 03 · PLANTING  +  04 · GROWTH (one continuous pinned shot) -->
       <section class="growth" id="growth" data-scene data-cover data-navbg="none" data-chapter="2">
@@ -185,12 +165,6 @@
               <i class="g-head__body" data-sq="body" data-w="24" data-lines="3" data-seed="53"></i>
             </div>
 
-            <div class="g-ring">
-              <svg viewBox="0 0 120 120"><g class="g-ring__segs"></g></svg>
-              <span class="g-ring__icon" data-icon="palm"></span>
-              <i data-sq="label" data-w="7" data-seed="54" data-align="center"></i>
-            </div>
-
             <div class="g-rail">
               <div class="g-rail__line"><b></b></div>
               <div class="g-rail__node" style="--xf: 0"><span data-icon="seed"></span><i data-sq="label" data-w="4.5" data-seed="61"></i></div>
@@ -205,16 +179,6 @@
               <svg class="g-card__bars" viewBox="0 0 200 64"></svg>
               <i data-sq="body" data-w="11" data-lines="1" data-seed="72"></i>
             </div>
-            <div class="g-card g-card--right" id="card-sun">
-              <span class="g-card__lead"></span>
-              <div class="g-card__head"><span data-icon="sun"></span><i data-sq="label" data-w="7" data-seed="73"></i></div>
-              <svg class="g-card__gauge" viewBox="0 0 200 84">
-                <path class="track" d="M18 76 A82 82 0 0 1 182 76" pathLength="1" />
-                <path class="fill" d="M18 76 A82 82 0 0 1 182 76" pathLength="1" />
-                <circle class="dot" r="5" cx="18" cy="76" />
-              </svg>
-              <i data-sq="body" data-w="11" data-lines="1" data-seed="74"></i>
-            </div>
           </div>
         </div>
       </section>
@@ -224,20 +188,11 @@
         <div class="water__stage">
           <canvas class="water__canvas"></canvas>
           <div class="water__ui">
-            <div class="w-head w-head--a">
+            <div class="w-head">
               <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="8.5" data-seed="201"></i></div>
               <i data-sq="title" data-w="27" data-lines="2" data-seed="202" data-last="0.55"></i>
               <i class="w-head__body" data-sq="body" data-w="22" data-lines="2" data-seed="203"></i>
             </div>
-            <div class="w-head w-head--b">
-              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="8" data-seed="211"></i></div>
-              <i data-sq="title" data-w="26" data-lines="2" data-seed="212" data-last="0.5"></i>
-              <i class="w-head__body" data-sq="body" data-w="21" data-lines="2" data-seed="213"></i>
-            </div>
-            <div class="w-chip"><span data-icon="drop"></span><i data-sq="label" data-w="3.4" data-seed="221"></i></div>
-            <div class="w-chip"><span data-icon="drop"></span><i data-sq="label" data-w="3.8" data-seed="222"></i></div>
-            <div class="w-chip"><span data-icon="drop"></span><i data-sq="label" data-w="3.2" data-seed="223"></i></div>
-            <div class="w-chip"><span data-icon="drop"></span><i data-sq="label" data-w="3.6" data-seed="224"></i></div>
             <div class="w-card" id="card-water">
               <div class="w-card__head"><span data-icon="drop"></span><i data-sq="label" data-w="7" data-seed="231"></i></div>
               <svg class="w-spark" viewBox="0 0 200 64">
@@ -246,11 +201,6 @@
                 <circle class="dot" r="4.5" />
               </svg>
               <i data-sq="body" data-w="11.5" data-lines="1" data-seed="232"></i>
-            </div>
-            <div class="w-flow">
-              <span data-icon="drop"></span>
-              <i data-sq="label" data-w="5" data-seed="241"></i>
-              <span class="w-flow__bars"><b></b><b></b><b></b><b></b></span>
             </div>
           </div>
         </div>
@@ -271,39 +221,6 @@
                 <li><span data-icon="sun"></span><i data-sq="label" data-w="4.2" data-seed="303"></i><span class="ripen__meter"><b></b></span></li>
                 <li><span data-icon="drop"></span><i data-sq="label" data-w="4.6" data-seed="304"></i><span class="ripen__meter"><b></b></span></li>
                 <li><span data-icon="leaf"></span><i data-sq="label" data-w="3.8" data-seed="305"></i><span class="ripen__meter"><b></b></span></li>
-              </ul>
-            </article>
-            <article class="ripen__panel">
-              <span class="ripen__chip" style="--c: #e0ad3a"></span>
-              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="6.5" data-seed="310"></i></div>
-              <i data-sq="display" data-w="25" data-lines="2" data-seed="311" data-last="0.62"></i>
-              <i class="ripen__body" data-sq="body" data-w="21" data-lines="3" data-seed="312"></i>
-              <ul class="ripen__meters">
-                <li><span data-icon="sun"></span><i data-sq="label" data-w="4.2" data-seed="313"></i><span class="ripen__meter"><b></b></span></li>
-                <li><span data-icon="drop"></span><i data-sq="label" data-w="4.6" data-seed="314"></i><span class="ripen__meter"><b></b></span></li>
-                <li><span data-icon="leaf"></span><i data-sq="label" data-w="3.8" data-seed="315"></i><span class="ripen__meter"><b></b></span></li>
-              </ul>
-            </article>
-            <article class="ripen__panel">
-              <span class="ripen__chip" style="--c: #9a5a24"></span>
-              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="7.5" data-seed="320"></i></div>
-              <i data-sq="display" data-w="25" data-lines="2" data-seed="321" data-last="0.45"></i>
-              <i class="ripen__body" data-sq="body" data-w="21" data-lines="3" data-seed="322"></i>
-              <ul class="ripen__meters">
-                <li><span data-icon="sun"></span><i data-sq="label" data-w="4.2" data-seed="323"></i><span class="ripen__meter"><b></b></span></li>
-                <li><span data-icon="drop"></span><i data-sq="label" data-w="4.6" data-seed="324"></i><span class="ripen__meter"><b></b></span></li>
-                <li><span data-icon="leaf"></span><i data-sq="label" data-w="3.8" data-seed="325"></i><span class="ripen__meter"><b></b></span></li>
-              </ul>
-            </article>
-            <article class="ripen__panel">
-              <span class="ripen__chip" style="--c: #2a140c"></span>
-              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="6" data-seed="330"></i></div>
-              <i data-sq="display" data-w="25" data-lines="2" data-seed="331" data-last="0.58"></i>
-              <i class="ripen__body" data-sq="body" data-w="21" data-lines="3" data-seed="332"></i>
-              <ul class="ripen__meters">
-                <li><span data-icon="sun"></span><i data-sq="label" data-w="4.2" data-seed="333"></i><span class="ripen__meter"><b></b></span></li>
-                <li><span data-icon="drop"></span><i data-sq="label" data-w="4.6" data-seed="334"></i><span class="ripen__meter"><b></b></span></li>
-                <li><span data-icon="leaf"></span><i data-sq="label" data-w="3.8" data-seed="335"></i><span class="ripen__meter"><b></b></span></li>
               </ul>
             </article>
           </div>
@@ -328,7 +245,7 @@
           </svg>
           <span class="h-flash"></span>
           <div class="harvest__ui">
-            <div class="h-head h-head--a">
+            <div class="h-head">
               <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="8" data-seed="501"></i></div>
               <i data-sq="display" data-w="26" data-lines="2" data-seed="502" data-last="0.5"></i>
               <i class="h-head__body" data-sq="body" data-w="21" data-lines="2" data-seed="503"></i>
@@ -341,11 +258,6 @@
                 <li><span data-icon="sun"></span><i data-sq="label" data-w="6.6" data-seed="514"></i><svg class="check" viewBox="0 0 20 20"><path d="M4 10.5l4 4 8-9" pathLength="1" /></svg></li>
               </ul>
               <div class="h-batch"><svg class="barcode" viewBox="0 0 120 30" preserveAspectRatio="none"></svg><i data-sq="label" data-w="5" data-seed="515"></i></div>
-            </div>
-            <div class="h-head h-head--b">
-              <div class="eyebrow"><span class="eyebrow__rule"></span><i data-sq="label" data-w="8.5" data-seed="521"></i></div>
-              <i data-sq="display" data-w="25" data-lines="2" data-seed="522" data-last="0.55"></i>
-              <i class="h-head__body" data-sq="body" data-w="20" data-lines="2" data-seed="523"></i>
             </div>
             <div class="h-cta">
               <i data-sq="label" data-w="7" data-seed="531"></i>

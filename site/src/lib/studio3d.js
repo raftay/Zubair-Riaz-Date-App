@@ -276,7 +276,7 @@ export class Studio3D {
     this.hero.scale.setScalar(DATE_LEN / 2);
     s.add(this.hero);
     const haloMat = new THREE.MeshBasicMaterial({ color: '#ffdc94', transparent: true, opacity: 0, depthWrite: false });
-    this.halos = [0.62, 0.78].map((rad) => {
+    this.halos = [0.44, 0.54].map((rad) => {
       const m = new THREE.Mesh(new THREE.TorusGeometry(rad, 0.008, 8, 128), haloMat.clone());
       s.add(m);
       return m;

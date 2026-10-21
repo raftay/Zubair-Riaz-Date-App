@@ -2,7 +2,7 @@
 
 A concept "website" for a premium date brand. It's built as a real scrolling page and rendered frame by frame into a video that looks like someone slowly scrolling down it. See [PLAN.md](PLAN.md) for the creative direction and scene-by-scene flow.
 
-**Current stage:** Scenes 1–8 are built and run 64s: Hero → the date becomes the seed → planting → growth → water → ripening → harvest → packaging.
+**Current stage:** Scenes 1–8 are built and run 46s: Hero → the date becomes the seed → planting → growth → water → ripening → harvest → packaging. The film is paced around one stop per section, where that section's copy sits; the storyboard has one still per stop.
 
 ## Layout
 
@@ -17,10 +17,10 @@ site/        the concept site (Vite, vanilla JS, canvas + SVG; no copy, only squ
   src/lib/studio3d.js  3D studio for harvest + packaging: sickle, basket, gift box, ribbon, seal, tag
   src/scenes/          hero.js (01, pinned) · date.js (02, same stage) · thread.js (falling seed + bridge)
                        growth.js (03 planting + 04 growth, one continuous pinned shot)
-                       water.js (05) · ripen.js (06, horizontal panels)
+                       water.js (05) · ripen.js (06, one panel, continuous ripening)
                        harvest.js (07 harvest + 08 packaging, one continuous 3D shot)
                        sections marked .sheet slide up over the pinned stage before them
-  public/img/          Zubair cut-out (graded, upscaled)
+  public/img/          Zubair photo: zubair-person (him) over zubair-plate (his background, defocused)
 capture/     Playwright + ffmpeg renderer
   choreography.json    the "human scroll": time → position keyframes
   record.mjs           renders the film
@@ -40,7 +40,7 @@ cd site && npm install && npm run dev      # http://127.0.0.1:5173
 ```bash
 cd site && npm run build                   # the renderer serves the built site
 cd ../capture && npm install
-node stills.mjs                            # → storyboard/*.jpg  (node stills.mjs ../storyboard 1 png for PNG)
+node stills.mjs                            # → storyboard/*.jpg, one per stop  (node stills.mjs ../storyboard 1 png for PNG)
 ./film.sh ../out/film.mp4                  # 1920×1080 @ 60fps, in resumable 10s segments
 ./film.sh ../out/film-4k.mp4 10 --scale 2 --png   # 3840×2160
 node record.mjs --from 9 --to 15           # render one part of the timeline directly
@@ -52,4 +52,9 @@ The 3D date, the date bunch and the studio render through WebGL. Headless Chromi
 
 ## Photo
 
-`site/public/img/zubair.webp` is cut out from a frame of one of Zubair's public YouTube thumbnails. It was upscaled 4× with Real-ESRGAN, the background was removed with BiRefNet, and the tee was regraded to the brand's sand tone (a small logo was removed). It's **a placeholder for the concept only**. Public release needs an official photo from Zubair's team, and a higher-res source would also sharpen the 4K render.
+The hero photo is a frame from one of Zubair's public YouTube thumbnails, kept whole rather than cut out. It was upscaled 4× with Real-ESRGAN, and his matte comes from BiRefNet refined with closed-form matting, so his hair and edges stay intact. Colour from the thumbnail's background was pulled out of his edges, and the thumbnail's white sticker outline was removed. It's split into two layers on one canvas:
+
+- `site/public/img/zubair-person.webp` is Zubair. The tee is regraded to the brand's sand tone, and a small logo and mic pin were removed.
+- `site/public/img/zubair-plate.webp` is his own palm-grove background. He has been removed from it and the thumbnail's edited panel painted out. It is then defocused, graded into the page's warm palette, and given extra headroom above his head.
+
+The gold arch sits between the two layers. The photo is **a placeholder for the concept only**. Public release needs an official photo from Zubair's team, and a higher-res source would also sharpen the 4K render.

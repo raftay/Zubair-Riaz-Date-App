@@ -7,7 +7,7 @@ const SEED_RY = 14.4; // seed glyph half-height at 1920 wide (matches the soil s
 
 // 02 · The date becomes the seed. Runs on the hero's pinned stage: the glint on
 // the photographed date flares into a real 3D Ajwa date, which turns like a
-// product shot, opens to reveal its seed, and lets the seed fall away — trailing
+// product shot and opens to reveal its seed, then lets the seed fall away — trailing
 // the golden thread that continues down the page.
 export function dateScene(hero) {
   const root = document.getElementById('hero');
@@ -17,8 +17,6 @@ export function dateScene(hero) {
   const [ring, ticks] = orbit.querySelectorAll('ellipse');
   const trail = root.querySelector('.date__trail');
   const trailPaths = [trail.querySelector('.date__trail-glow'), trail.querySelector('.date__trail-core')];
-  const lead = trail.querySelector('.date__lead');
-  const leadDot = trail.querySelector('.date__lead-dot');
   const glyph = trail.querySelector('.seedglyph');
   const ui = (sel) => {
     const el = root.querySelector(sel);
@@ -26,15 +24,13 @@ export function dateScene(hero) {
       el,
       rule: el.querySelector('.eyebrow__rule'),
       sqs: [...el.querySelectorAll('[data-sq]')].map((e) => e._sq),
-      items: [...el.querySelectorAll('li, .date-ui__callout')],
+      items: [...el.querySelectorAll('li')],
     };
   };
   const product = ui('.date-ui--product');
-  const inside = ui('.date-ui--inside');
-  const callout = root.querySelector('.date-ui__callout');
   const date3d = new Date3D(gl);
 
-  let W = 1920, H = 1080, k = 1, end = 0, calloutAt = [0, 0];
+  let W = 1920, H = 1080, k = 1, end = 0;
 
   // write a block in, then (optionally) un-write it again
   function block(b, p, a, z, out0, out1) {
@@ -57,7 +53,6 @@ export function dateScene(hero) {
       H = s.vh;
       k = W / 1920;
       date3d.resize(W, H, s.dpr);
-      calloutAt = [callout.offsetLeft - 1.4 * (W / 120), callout.offsetTop + 0.9 * (W / 120)];
       end = hero.locate({ p: 1 });
     },
 
@@ -121,22 +116,8 @@ export function dateScene(hero) {
       orbit.style.opacity = ringOut;
       ticks.style.opacity = 0.35 * ringIn * ringOut;
 
-      // --- copy blocks (squiggles) ---
-      block(product, p, 0.27, 0.39, 0.47, 0.53);
-      const iv = block(inside, p, 0.57, 0.68, 0.79, 0.85);
-
-      // leader from the seed to the callout
-      const la = smoothstep(0.6, 0.66, p) * (1 - smoothstep(0.78, 0.84, p));
-      if (la > 0) {
-        const ax = sx + 0.14 * sh, ay = sy - 0.18 * sh;
-        const [bx, by] = calloutAt;
-        lead.setAttribute('d', `M${ax} ${ay} L${bx - 3.2 * (W / 120)} ${by} L${bx} ${by}`);
-        lead.style.strokeDashoffset = 1 - ease.out(invlerp(0.6, 0.68, p)) * iv;
-        leadDot.setAttribute('cx', ax);
-        leadDot.setAttribute('cy', ay);
-      }
-      lead.style.opacity = la;
-      leadDot.style.opacity = la;
+      // --- copy: one product block, held while the date turns and opens ---
+      block(product, p, 0.27, 0.39, 0.7, 0.77);
 
       // --- golden thread trailing the falling seed, then the seed glyph ---
       const ta = smoothstep(0.82, 0.87, p) * (s.y <= end + H ? 1 : 0);

@@ -2,14 +2,14 @@
 
 **Project plan & design flow** · v1
 
-> **Status:** All §9 decisions are locked to the defaults, and scenes 1–8 are built and run as one 64s film:
-> - **01 Hero → 02 Date → seed:** the camera pushes into the date, a real-time 3D Ajwa date opens, and its seed falls along the golden thread.
-> - **03 Planting → 04 Growth:** one continuous pinned shot.
-> - **05 Water:** a drip line, wetting bulbs in the soil, and water climbing the roots and trunk into the crown.
-> - **06 Ripening:** a pinned horizontal section in which a 3D bunch ripens Kimri → Khalal → Rutab → Tamr.
-> - **07 Harvest → 08 Packaging:** one pinned 3D studio shot. A sickle cuts the bunch into a woven basket, one Ajwa is lifted out and inspected, then it flies into the gift box, which closes, is ribboned, sealed, tagged and turned to the light.
+> **Status:** All §9 decisions are locked to the defaults. Scenes 1–8 are built and run as one 46s film, paced around **eight stops**: one screen per section where its copy and data sit, with everything between them as transition (see §4).
+> - **01 Hero → 02 Date → seed:** the camera pushes into the date, a real-time 3D Ajwa date turns beside one product block and opens, and its seed falls along the golden thread.
+> - **03 Planting → 04 Growth:** one continuous pinned shot. The soil cards are one stop; the palm then grows in a single sweep to the growth stop.
+> - **05 Water:** a drip line, wetting bulbs and the water log at the base of the palm (the stop), then water climbs the trunk into the crown.
+> - **06 Ripening:** one panel; the 3D bunch ripens Kimri → Khalal → Rutab → Tamr while its meters and stage rail follow.
+> - **07 Harvest → 08 Packaging:** one pinned 3D studio shot. A sickle cuts the bunch into a woven basket, one Ajwa is inspected (the harvest stop), then it flies into the gift box, which closes, is ribboned, sealed, tagged and turned to the light (the box stop).
 >
-> Each section from Water onward slides up over the pinned stage before it as a rounded "sheet". The two interludes were cut and every scene was tightened, so scenes 1–6 now run 47s instead of 79s.
+> The hero photo keeps Zubair's real surroundings: the full frame, with his palm grove defocused and graded into the page instead of a hard cut-out.
 >
 > **Next:** 09 Shipping.
 
@@ -17,7 +17,7 @@
 
 ## 1. What we're making
 
-A concept video, about 85–95 seconds long, that looks like someone slowly scrolling down a high-end brand website for **Zubair Riaz Premium Dates** (a working name). It is concept art, not a working store. The page tells one continuous story from top to bottom:
+A concept video, about 70 seconds long, that looks like someone slowly scrolling down a high-end brand website for **Zubair Riaz Premium Dates** (a working name). It is concept art, not a working store. The page tells one continuous story from top to bottom:
 
 > Zubair holding a date → the date becomes a seed → planted in tracked soil → the palm grows → it is watered → the dates ripen → harvest & hand-selection → packed in a luxury box → shipped across the world → you scan the box and see the whole journey.
 
@@ -45,7 +45,7 @@ One line runs from soil to your door. It holds the whole film together and *is* 
 | 2 | **Final video**: 3840×2160 (4K) @ 60fps | Same page, rendered at 2× pixel density |
 | 3 | *(Optional)* **Vertical cut**: 9:16, 1080×1920 | Mobile layout of the same site, for Shorts/Reels/TikTok |
 | 4 | **Live HTML concept site** | Can be scrolled for real in a browser and demoed live |
-| 5 | **Storyboard stills** | One high-res PNG per scene, for decks and thumbnails |
+| 5 | **Storyboard stills** | One high-res still per stop, for decks and thumbnails |
 
 The video is silent by default so music and voiceover can be added in editing.
 
@@ -102,24 +102,27 @@ Each squiggle **draws itself on** (a stroke animation) as its section scrolls in
 
 ## 4. Design flow, scene by scene
 
-Times for scenes 1–8 match the current render; 9–11 are targets. The film was tightened from the original ~90s target and should now land around 85s in total. All pacing lives in one config file (see §5).
+**Pacing rule: one stop per section.** Like a normal brand site, each section has one screen where its copy and data sit, and the film holds there for 2–4 seconds. Everything between stops is motion only (zooms, growth, sheets sliding in) with no new copy appearing. The whole film should have about 12 stops, around 70s.
 
-| # | Scene | Time | Behaviour |
+Times for stops 1–8 match the current render; 9–12 are targets. All pacing lives in one config file (see §5).
+
+| # | Stop | What sits there | Time |
 |---|---|---|---|
-| 1 | Hero: Zubair with the date | 0:00–0:04 | Static, then parallax |
-| 2 | Date → seed transition | 0:04–0:13 | Pinned zoom, then the falling seed |
-| 3 | Planting: the soil | 0:13–0:19 | Pinned |
-| 4 | Growth: the palm rises | 0:19–0:28 | Pinned (long) |
-| 5 | Water | 0:28–0:38 | Pinned sheet |
-| 6 | Ripening: 4 stages | 0:38–0:47 | Pinned horizontal scroll |
-| 7 | Harvest & hand-selection | 0:47–0:57 | Pinned 3D studio (one shot with 8) |
-| 8 | Packaging: the box | 0:57–1:04 | Pinned 3D studio |
-| 9 | Shipping: the globe | 1:04–1:13 | Pinned |
-| 10 | Traceability: scan your box | 1:13–1:19 | Scroll-through |
-| 11 | Collection, Zubair's sign-off, footer | 1:19–1:26 | Scroll-through, final hold |
+| 1 | Hero: Zubair with the date | Headline, body, two buttons, three feature labels | 0:00–0:04 |
+| 2 | The date | One product block and three specs; the date opens and the seed falls | 0:05–0:09 |
+| 3 | Soil | Heading and three soil cards (moisture, pH, minerals) | 0:12–0:15 |
+| 4 | Growth | Heading, stage rail, one height card | 0:16–0:21 |
+| 5 | Water | Heading and the water-log card | 0:22–0:27 |
+| 6 | Ripening | One panel: meters and stage rail follow the ripening bunch | 0:28–0:33 |
+| 7 | Harvest | Heading and the inspection card | 0:34–0:40 |
+| 8 | The box | Price, quantity and add-to-bag | 0:43–0:46 |
+| 9 | Shipping: the globe | One reach panel beside the globe | ~0:46–0:53 |
+| 10 | Traceability: scan your box | Phone with the journey timeline | ~0:53–0:59 |
+| 11 | Collection | Three boxes | ~0:59–1:04 |
+| 12 | Sign-off and footer | Quote, signature, footer | ~1:04–1:10 |
 
 ### Scene 1: Hero (Zubair holding a date)
-- **Layout:** full-screen, Ajwa Black background with a warm spotlight. Zubair is cut out from his photo background and stands on the right two-thirds, holding a single glossy date toward the camera. A large `display` squiggle (the headline) and a `body` squiggle sit on the left, with a gold `button` below them.
+- **Layout:** full-screen, Ajwa Black background with a warm spotlight. Zubair stands on the right two-thirds in his own photo, holding a single glossy date toward the camera. His real background (a palm grove) is kept but defocused and graded warm, so the photo melts into the page; a thin gold arch outline sits between him and that background. A large `display` squiggle (the headline) and a `body` squiggle sit on the left, with a gold `button` below them.
 - **Nav bar:** a small gold logo mark (a stylised date seed) and the wordmark on the left. Squiggle nav items and a pill "shop" button sit on the right, over a frosted-glass bar.
 - **Motion:** Zubair, the background glow and the dust particles move at different parallax depths. The date in his hand catches a slow **gold glint** that sweeps across it; this is the first appearance of the golden thread. A small scroll cue pulses at the bottom.
 - **Out:** as the scroll begins, the camera pushes in on the date.
@@ -139,7 +142,7 @@ Times for scenes 1–8 match the current render; 9–11 are targets. The film wa
 ### Scene 4: Growth (the palm rises)
 - **Pinned, long scene. It's the centrepiece.** Scrolling *grows* the date palm: sprout → sapling → young palm → full mature palm, with its crown of arching fronds and textured diamond-pattern trunk.
 - Underground, the roots spread out in gold-traced lines (a split view: earth below, sky above).
-- **Time-lapse sky:** the sun arcs across, days pass in light/shadow sweeps, and the sky moves from pre-dawn indigo to Desert Sand. A thin **years ring** in the corner fills as the palm matures.
+- **Time-lapse sky:** the sun arcs across, days pass in light/shadow sweeps, and the sky moves from pre-dawn indigo to Desert Sand. A stage rail fills as the palm matures, and one height card lands on the trunk's measuring rule at the end.
 - The golden thread runs up the trunk as it grows.
 - **Out:** the camera settles at mid-trunk height for the water scene.
 
@@ -150,12 +153,12 @@ Times for scenes 1–8 match the current render; 9–11 are targets. The film wa
 - **Out:** the camera rises up the trunk to the crown.
 
 ### Scene 6: Ripening (the four real stages)
-- **Pinned horizontal scroll.** Scrolling down moves the page sideways through four panels. Each shows a hanging date cluster up close, with a `label` + `body` squiggle:
+- **Pinned, one panel.** A hanging date cluster up close beside one `label` + `body` squiggle block and three meters. Scrolling ripens it through the four stages:
   1. **Kimri**: hard, green
   2. **Khalal**: crisp, yellow-red
   3. **Rutab**: half-soft, turning amber-brown
   4. **Tamr**: fully ripe, deep near-black, wrinkled skin (Ajwa-style)
-- The dates **morph colour and texture** between panels, so it plays as one continuous ripening. Backgrounds warm from cream to amber.
+- The dates **morph colour and texture** continuously, and the meters follow. Backgrounds warm from cream to amber.
 - A progress rail along the bottom marks the four stages.
 - **Out:** the last panel holds on a perfect Tamr cluster in golden-hour light.
 

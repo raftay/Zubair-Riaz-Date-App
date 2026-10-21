@@ -1,12 +1,11 @@
 import { docTop } from '../engine.js';
-import { clamp, invlerp, ease } from '../lib/math.js';
 
 // The falling seed rides the tip of the thread at this fraction of the viewport.
 export const LEAD = 0.62;
 
 // The golden thread: picks up where the date scene lets the seed fall and is
 // drawn down the page as you scroll. The seed itself is the tip, so it seems
-// to drift down through the page, landing in the soil scene.
+// to drift down through the dark, landing in the soil scene.
 export function threadScene() {
   const svg = document.getElementById('thread');
   const glow = svg.querySelector('.thread__glow');
@@ -15,11 +14,8 @@ export function threadScene() {
   const hero = document.getElementById('hero');
   const bridge = document.getElementById('bridge');
   const growth = document.getElementById('growth');
-  const bridgeInner = bridge.querySelector('.bridge__inner');
-  const bridgeMark = bridge.querySelector('.bridge__mark');
-  const [bLabel, bTitle] = [...bridge.querySelectorAll('[data-sq]')].map((e) => e._sq);
 
-  let total = 0, table = [], innerTop = 0, start = 0, k = 1;
+  let total = 0, table = [], start = 0, k = 1;
 
   // Catmull-Rom through points -> cubic Bézier path data
   function spline(pts) {
@@ -44,11 +40,9 @@ export function threadScene() {
       const ex = 0.62 * W;
       const pts = [
         [0.5 * W, start + LEAD * H],
-        [0.5 * W, start + (LEAD + 0.08) * H],
-        [0.53 * W, start + (LEAD + 0.3) * H],
-        [0.79 * W, bTop + 0.4 * bH],
-        [0.75 * W, bTop + 0.76 * bH],
-        [ex, end - 0.16 * H],
+        [0.5 * W, start + (LEAD + 0.1) * H],
+        [0.6 * W, bTop + 0.35 * bH],
+        [ex, end - 0.12 * H],
         [ex, end - 0.02 * H],
         [ex, end],
       ];
@@ -66,7 +60,6 @@ export function threadScene() {
         table.push([l, p.x, p.y]);
       }
       for (const el of [glow, core]) el.style.strokeDasharray = `${total} ${total + 10}`;
-      innerTop = docTop(bridgeInner);
     },
 
     update(s) {
@@ -86,15 +79,6 @@ export function threadScene() {
         const ang = Math.atan2(table[j][1] - table[j - 1][1], table[j][2] - table[j - 1][2]);
         seed.setAttribute('transform', `translate(${x} ${y}) rotate(${(-ang * 180) / Math.PI * 0.8}) scale(${k})`);
       }
-
-      // bridge statement writes itself as it rises into view
-      const rel = innerTop - s.y;
-      const p = invlerp(0.92 * H, 0.38 * H, rel);
-      bridgeMark.style.opacity = ease.out(invlerp(0, 0.3, p));
-      bridgeMark.style.transform = `translateY(${(1 - ease.out(invlerp(0, 0.3, p))) * 1.5}rem)`;
-      bLabel.setProgress(invlerp(0.1, 0.45, p));
-      bTitle.setProgress(ease.inOutSine(invlerp(0.25, 1, p)));
-      bridgeInner.style.transform = `translateY(${clamp(rel / H - 0.5) * -6}vh)`;
     },
   };
 }

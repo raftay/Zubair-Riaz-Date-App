@@ -255,7 +255,7 @@ i[data-sq] {
 /* ---------- 01 hero ---------- */
 .hero {
   position: relative;
-  height: 420vh;
+  height: 320vh;
   background: var(--ajwa);
 }
 .hero__stage {
@@ -329,21 +329,29 @@ i[data-sq] {
 .hero__arch path + path {
   opacity: 0.35;
 }
-.hero__person {
+.hero__person,
+.hero__plate {
+  /* both layers share one canvas: Zubair, and his own surroundings defocused behind him */
   position: absolute;
-  z-index: 2;
-  left: 47.2rem;
+  left: 37.5rem;
   bottom: -1.5rem;
-  height: 58rem;
-  aspect-ratio: 2000 / 1912;
+  height: 75rem;
+  aspect-ratio: 2720 / 2472;
+}
+.hero__person {
+  z-index: 2;
 }
 .hero__person img {
   display: block;
   width: 100%;
   height: 100%;
-  -webkit-mask-image: linear-gradient(to bottom, #000 89%, transparent 99.5%);
-  mask-image: linear-gradient(to bottom, #000 89%, transparent 99.5%);
-  filter: drop-shadow(0 0 2.5rem rgba(0, 0, 0, 0.5));
+  -webkit-mask-image: linear-gradient(to bottom, #000 91.5%, transparent 99.6%);
+  mask-image: linear-gradient(to bottom, #000 91.5%, transparent 99.6%);
+}
+.hero__plate {
+  display: block;
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 97%);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 97%);
 }
 .hero__glint {
   position: absolute;
@@ -510,15 +518,6 @@ i[data-sq] {
   stroke: #f0cf86;
   stroke-width: 1.6;
 }
-.date__lead {
-  stroke: rgba(240, 207, 134, 0.85);
-  stroke-width: 1.2;
-  stroke-dasharray: 1 2;
-}
-.date__lead-dot {
-  fill: #fff3cf;
-  filter: drop-shadow(0 0 6px rgba(255, 210, 120, 0.9));
-}
 .seedglyph__halo {
   fill: rgba(255, 206, 120, 0.3);
   filter: blur(7px);
@@ -584,26 +583,6 @@ i[data-sq] {
 .date-ui__specs li div > i + i {
   color: rgba(232, 217, 189, 0.55);
 }
-.date-ui__callout {
-  position: absolute;
-  right: 9.5rem;
-  top: 27vh;
-  width: 17rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  color: rgba(232, 217, 189, 0.62);
-}
-.date-ui__tag {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  color: var(--gold-hi);
-}
-.date-ui__tag > span {
-  width: 1.5rem;
-  height: 1.5rem;
-}
 
 /* ---------- golden thread (document-level) ---------- */
 .thread {
@@ -635,34 +614,14 @@ i[data-sq] {
 /* ---------- bridge ---------- */
 .bridge {
   position: relative;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(to bottom, var(--ajwa) 0, var(--ajwa) 55%, #04040a 100%);
-}
-.bridge__inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.8rem;
-  margin-top: -6vh;
-  color: var(--cream);
-}
-.bridge__mark {
-  width: 2.8rem;
-  height: 2.8rem;
-  color: var(--gold);
-  margin-bottom: 0.6rem;
-}
-.bridge__inner > i:nth-of-type(1) {
-  color: var(--gold);
+  height: 60vh;
+  background: linear-gradient(to bottom, var(--ajwa) 0, #04040a 100%);
 }
 
 /* ---------- 04 growth ---------- */
 .growth {
   position: relative;
-  height: 1000vh;
+  height: 760vh;
   background: #04040a;
 }
 .growth__stage {
@@ -694,34 +653,6 @@ i[data-sq] {
 .g-head__body {
   margin-top: 1.8rem;
   opacity: 0.7;
-}
-.g-ring {
-  position: absolute;
-  right: 8.5rem;
-  top: 21vh;
-  width: 9rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.2rem;
-  color: var(--sky-ink);
-}
-.g-ring > svg {
-  width: 8.2rem;
-  height: 8.2rem;
-  overflow: visible;
-}
-.g-ring > svg path {
-  fill: none;
-  stroke-width: 2.4;
-  stroke-linecap: round;
-}
-.g-ring__icon {
-  position: absolute;
-  top: 2.6rem;
-  width: 3rem;
-  height: 3rem;
-  color: var(--gold);
 }
 .g-rail {
   position: absolute;
@@ -829,34 +760,11 @@ i[data-sq] {
 .g-card--left .g-card__lead {
   left: 100%;
 }
-.g-card--right .g-card__lead {
-  right: 100%;
-  transform: scaleX(-1);
-}
 .g-card__bars rect {
   fill: rgba(42, 26, 16, 0.1);
 }
 .g-card__bars rect.on {
   fill: #c39540;
-}
-.g-card__gauge .track {
-  fill: none;
-  stroke: rgba(42, 26, 16, 0.2);
-  stroke-width: 3;
-  stroke-dasharray: 0.012 0.018;
-}
-.g-card__gauge .fill {
-  fill: none;
-  stroke: #c39540;
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-dasharray: 1 2;
-}
-.g-card__gauge .dot {
-  fill: #fff3cf;
-  stroke: #c39540;
-  stroke-width: 2;
-  filter: drop-shadow(0 0 6px rgba(240, 180, 80, 0.9));
 }
 
 /* ---------- 03 planting: soil cards ---------- */
@@ -1002,7 +910,7 @@ i[data-sq] {
 
 /* ---------- 05 water ---------- */
 .water {
-  height: 620vh;
+  height: 420vh;
   background: #bba68a;
 }
 .water__stage {
@@ -1036,33 +944,12 @@ i[data-sq] {
   margin-top: 1.8rem;
   opacity: 0.7;
 }
-.w-chip,
-.w-card,
-.w-flow {
+.w-card {
   position: absolute;
   left: 0;
   top: 0;
   opacity: 0;
   will-change: transform, opacity;
-}
-.w-chip {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 0.95rem;
-  border-radius: 99rem;
-  background: rgba(255, 252, 244, 0.7);
-  border: 1px solid rgba(94, 156, 154, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: #1f4c4a;
-  box-shadow: 0 0.6rem 1.6rem rgba(30, 50, 50, 0.16);
-}
-.w-chip > span {
-  width: 1.05rem;
-  height: 1.05rem;
-}
-.w-card {
   width: 16.5rem;
   padding: 1.3rem 1.4rem 1.2rem;
   border-radius: 1.1rem;
@@ -1111,40 +998,10 @@ i[data-sq] {
 .w-card > i {
   opacity: 0.55;
 }
-.w-flow {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.7rem 1.1rem;
-  border-radius: 99rem;
-  background: rgba(255, 252, 244, 0.72);
-  border: 1px solid rgba(94, 156, 154, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: #1f4c4a;
-  box-shadow: 0 0.8rem 2rem rgba(20, 40, 40, 0.2);
-}
-.w-flow > span:first-child {
-  width: 1.2rem;
-  height: 1.2rem;
-}
-.w-flow__bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 0.18rem;
-  height: 1.1rem;
-}
-.w-flow__bars b {
-  width: 0.24rem;
-  height: 100%;
-  border-radius: 0.2rem;
-  background: #5e9c9a;
-  transform-origin: bottom;
-}
 
 /* ---------- 06 ripening ---------- */
 .ripen {
-  height: 640vh;
+  height: 400vh;
   background: #eee6cc;
 }
 .ripen__stage {
@@ -1280,7 +1137,7 @@ i[data-sq] {
 
 /* ---------- 07–08 harvest + packaging ---------- */
 .harvest {
-  height: 640vh;
+  height: 560vh;
   background: #0e0805;
 }
 .harvest__stage {

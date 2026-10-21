@@ -13,17 +13,11 @@ const TEAL = [94, 156, 154];
 export function waterScene() {
   const root = document.getElementById('water');
   const canvas = root.querySelector('.water__canvas');
-  const blocks = ['.w-head--a', '.w-head--b'].map((sel) => {
-    const el = root.querySelector(sel);
-    return { el, rule: el.querySelector('.eyebrow__rule'), sqs: [...el.querySelectorAll('[data-sq]')].map((e) => e._sq) };
-  });
-  const chips = [...root.querySelectorAll('.w-chip')].map((el) => ({ el, sq: el.querySelector('[data-sq]')._sq }));
+  const headEl = root.querySelector('.w-head');
+  const head = { el: headEl, rule: headEl.querySelector('.eyebrow__rule'), sqs: [...headEl.querySelectorAll('[data-sq]')].map((e) => e._sq) };
   const card = root.querySelector('#card-water');
   const cardSqs = [...card.querySelectorAll('[data-sq]')].map((e) => e._sq);
   const spark = card.querySelector('.w-spark');
-  const flow = root.querySelector('.w-flow');
-  const flowSq = flow.querySelector('[data-sq]')._sq;
-  const flowBars = [...flow.querySelectorAll('.w-flow__bars b')];
 
   // a fortnight of daily litres for the water-log sparkline
   const days = [42, 44, 41, 47, 45, 49, 46, 52, 50, 55, 53, 58, 56, 61];
@@ -175,7 +169,7 @@ export function waterScene() {
   // water rising through the trunk
   function drawXylem(w, t) {
     const a = smoothstep(0.34, 0.4, w) * (1 - 0.6 * smoothstep(0.9, 1, w));
-    if (a <= 0) return null;
+    if (a <= 0) return;
     const k = W / 1920;
     const hp = TRUNK_MAX * ease.inOut(invlerp(0.36, 0.84, w));
     const path = new Path2D();
@@ -215,7 +209,6 @@ export function waterScene() {
       ctx.fillRect(hx - 420 * k, hy - 420 * k, 840 * k, 840 * k);
     }
     ctx.restore();
-    return [hx, hy, hp];
   }
 
   function leader(x0, y0, x1, y1, a) {
@@ -285,25 +278,17 @@ export function waterScene() {
       }
       palm.draw(ctx, cam, 1, t, env);
       drawDripLine(w, t);
-      const head = drawXylem(w, t);
+      drawXylem(w, t);
 
-      // --- UI ---
-      block(blocks[0], Math.min(invlerp(-0.45 * H, 0.02 * range, ly), 1 - invlerp(0.4, 0.48, w)));
-      block(blocks[1], invlerp(0.86, 0.95, w));
+      // --- UI: one heading and the water-log card, at the base of the palm ---
+      block(head, Math.min(invlerp(-0.45 * H, 0.02 * range, ly), 1 - invlerp(0.4, 0.48, w)));
 
-      chips.forEach((c, i) => {
-        const v = ease.out(invlerp(0.06 + i * 0.035, 0.13 + i * 0.035, w)) * (1 - invlerp(0.4, 0.46, w));
-        c.el.style.opacity = v;
-        c.el.style.transform = `translate(${X(EMITTERS[i]) - c.el.offsetWidth / 2}px, ${Y(TUBE_Y) - 4.3 * rem + (1 - v) * 0.8 * rem}px)`;
-        c.sq.setProgress(invlerp(0.3, 1, v));
-      });
-
-      const cv = ease.out(invlerp(0.17, 0.27, w)) * (1 - invlerp(0.4, 0.46, w));
+      const cv = ease.out(invlerp(0.12, 0.22, w)) * (1 - invlerp(0.4, 0.46, w));
       const cx = 9.5 * rem, cy = 0.62 * H;
       card.style.opacity = cv;
       card.style.transform = `translate(${cx}px, ${cy + (1 - cv) * 1.4 * rem}px)`;
       cardSqs.forEach((q) => q.setProgress(invlerp(0.3, 1, cv)));
-      const drawn = ease.inOut(invlerp(0.2, 0.34, w));
+      const drawn = ease.inOut(invlerp(0.15, 0.3, w));
       spark.style.setProperty('--draw', drawn);
       const last = Math.min(days.length - 1, Math.floor(drawn * (days.length - 1)));
       sparkDot.setAttribute('cx', px(last));
@@ -312,17 +297,6 @@ export function waterScene() {
         const d = lerp(8, 150, ease.out(invlerp(0.04, 0.38, w)));
         leader(X(EMITTERS[0]), Y(d * 0.42), cx + cardSize[0], cy + cardSize[1] * 0.35, cv);
       }
-
-      const fv = head ? ease.out(invlerp(0.44, 0.5, w)) * (1 - invlerp(0.82, 0.88, w)) : 0;
-      flow.style.opacity = fv;
-      if (head) {
-        const fx = X(palm.trunkX(head[2], TRUNK_MAX) + palm.trunkR(head[2]) + 26);
-        const fy = clamp(head[1], 0.18 * H, 0.85 * H) - flow.offsetHeight / 2;
-        flow.style.transform = `translate(${fx}px, ${fy}px)`;
-        if (fv > 0) leader(head[0] + palm.trunkR(head[2]) * cam.s * 0.2, head[1], fx, fy + flow.offsetHeight / 2, fv);
-      }
-      flowSq.setProgress(invlerp(0.3, 1, fv));
-      flowBars.forEach((b, i) => (b.style.transform = `scaleY(${0.35 + 0.65 * Math.abs(Math.sin(t * 3 + i * 1.3))})`));
       root.dataset.chapter = 4;
     },
   };

@@ -17,49 +17,21 @@ const PROBE_DEPTH = [6, 16, 26]; // soil probes above each card (world units)
 
 export function growthScene() {
   const root = document.getElementById('growth');
-  const stage = root.querySelector('.growth__stage');
   const canvas = root.querySelector('.growth__canvas');
   const head = root.querySelector('.g-head');
   const headRule = head.querySelector('.eyebrow__rule');
   const [hEyebrow, hTitle, hBody] = [...head.querySelectorAll('[data-sq]')].map((e) => e._sq);
-  const ring = root.querySelector('.g-ring');
-  const ringSq = ring.querySelector('[data-sq]')._sq;
-  const segG = ring.querySelector('.g-ring__segs');
   const rail = root.querySelector('.g-rail');
   const railFill = rail.querySelector('.g-rail__line b');
   const nodes = [...rail.querySelectorAll('.g-rail__node')];
   const nodeSqs = nodes.map((n) => n.querySelector('[data-sq]')._sq);
   const NODE_AT = [0, 0.18, 0.42, 0.84];
-  const cards = [
-    { el: root.querySelector('#card-height'), h: 0.4 * TRUNK_MAX, side: -1 },
-    { el: root.querySelector('#card-sun'), h: 0.84 * TRUNK_MAX, side: 1 },
-  ];
+  // one data card, pinned to the measuring rule; it lands as the palm reaches maturity
+  const cards = [{ el: root.querySelector('#card-height'), h: 0.4 * TRUNK_MAX, side: -1 }];
   cards.forEach((c) => (c.sqs = [...c.el.querySelectorAll('[data-sq]')].map((e) => e._sq)));
 
-  // years ring: 7 arc segments
+  // height-card bars
   const NS = 'http://www.w3.org/2000/svg';
-  const SEG = 7;
-  const segs = [];
-  for (let i = 0; i < SEG; i++) {
-    const a0 = (i / SEG) * TAU - Math.PI / 2 + 0.06;
-    const a1 = ((i + 1) / SEG) * TAU - Math.PI / 2 - 0.06;
-    const d = `M${60 + 52 * Math.cos(a0)} ${60 + 52 * Math.sin(a0)} A52 52 0 0 1 ${60 + 52 * Math.cos(a1)} ${60 + 52 * Math.sin(a1)}`;
-    const track = document.createElementNS(NS, 'path');
-    track.setAttribute('d', d);
-    track.setAttribute('stroke', 'currentColor');
-    track.setAttribute('opacity', '0.22');
-    const fill = document.createElementNS(NS, 'path');
-    fill.setAttribute('d', d);
-    fill.setAttribute('pathLength', '1');
-    fill.setAttribute('stroke', '#E9C77E');
-    fill.style.strokeDasharray = '1 2';
-    segG.append(track, fill);
-    segs.push(fill);
-  }
-
-  // sunlight-card gauge + height-card bars
-  const gaugeFill = root.querySelector('.g-card__gauge .fill');
-  const gaugeDot = root.querySelector('.g-card__gauge .dot');
   const barsSvg = root.querySelector('.g-card__bars');
   const bars = [];
   for (let i = 0; i < 16; i++) {
@@ -317,7 +289,7 @@ export function growthScene() {
         ctx.stroke();
       }
       for (const c of cards) {
-        const vis = smoothstep(c.h, c.h + 30, Ht) * a2;
+        const vis = smoothstep(c.h, c.h + 30, Ht) * smoothstep(0.8, 0.9, g) * a2;
         const x = cam.ox + off(c.h) * s;
         const y = cam.oy - c.h * s;
         out.push({ x, y, vis });
@@ -446,11 +418,6 @@ export function growthScene() {
       hBody.setProgress(invlerp(0.4, 1, rv));
       head.style.transform = `translateY(${(1 - ease.out(rv)) * 3}rem)`;
 
-      ring.style.opacity = ease.out(invlerp(0.3, 1, rv));
-      ringSq.setProgress(invlerp(0.5, 1, rv));
-      const yrs = g * SEG;
-      segs.forEach((seg, i) => (seg.style.strokeDashoffset = 1 - clamp(yrs - i)));
-
       rail.style.opacity = ease.out(invlerp(0.4, 1, rv));
       railFill.style.width = `${g * 100}%`;
       nodes.forEach((n, i) => {
@@ -470,12 +437,8 @@ export function growthScene() {
         c.el.style.transform = `translate(${x + (1 - n.vis) * c.side * 1.5 * rem}px, ${y}px)`;
         c.sqs.forEach((q) => q.setProgress(invlerp(0.3, 1, n.vis)));
       });
-      const barsOn = Math.round(invlerp(0.3, 1, g) * bars.length);
+      const barsOn = Math.round(invlerp(0.2, 1, nodesAt[0].vis) * bars.length);
       bars.forEach((b, i) => b.classList.toggle('on', i < barsOn));
-      gaugeFill.style.strokeDashoffset = 1 - env.f;
-      const ga = Math.PI * (1 - env.f);
-      gaugeDot.setAttribute('cx', 100 + 82 * Math.cos(ga));
-      gaugeDot.setAttribute('cy', 76 - 82 * Math.sin(ga));
     },
   };
 }

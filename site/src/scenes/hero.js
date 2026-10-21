@@ -3,8 +3,8 @@ import { invlerp, smoothstep, ease, clamp, lerp, TAU } from '../lib/math.js';
 import { rng } from '../lib/rand.js';
 import { drawFrond } from '../lib/palm.js';
 
-// Where the date sits inside the photo (fraction of the person box).
-export const DATE_IN_PHOTO = [0.356, 0.856];
+// Where the date sits inside the photo (fraction of the person/plate canvas).
+export const DATE_IN_PHOTO = [0.3794, 0.8888];
 // Screen point the camera pushes the date toward, as a fraction of the viewport.
 export const DATE_CENTER = [0.5, 0.52];
 
@@ -22,6 +22,7 @@ export function heroScene() {
   const fronds = root.querySelector('.hero__fronds');
   const dust = root.querySelector('.hero__dust');
   const person = root.querySelector('.hero__person');
+  const plate = root.querySelector('.hero__plate');
   const glint = root.querySelector('.hero__glint');
   const content = root.querySelector('.hero__content');
   const rule = content.querySelector('.eyebrow__rule');
@@ -101,6 +102,7 @@ export function heroScene() {
 
       // --- intro reveal (virtual clock) ---
       glow.style.opacity = intro(0, 1.6);
+      plate.style.opacity = intro(0, 1.4);
       beam.style.opacity = intro(0.4, 2.2) * (0.85 + 0.15 * Math.sin(t * 0.7));
       fronds.style.opacity = intro(0.2, 1.8);
       arch[0].style.strokeDashoffset = 1 - intro(0.3, 2.4, ease.inOut);

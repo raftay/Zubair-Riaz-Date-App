@@ -1,11 +1,13 @@
 import { docTop } from '../engine.js';
-import { TAU, clamp, invlerp, smoothstep, ease, hex, mix, rgba, ramp } from '../lib/math.js';
+import { TAU, clamp, invlerp, ease, hex, mix, rgba, ramp } from '../lib/math.js';
 import { rng } from '../lib/rand.js';
 import { Cluster3D } from '../lib/cluster3d.js';
 import { drawFrond } from '../lib/palm.js';
 
 // backgrounds warm from morning cream to golden hour across the four stages
 const BG = ['#EEE6CC', '#F2DBA4', '#E7B97F', '#C88D55'].map(hex);
+// the stage chip beside the heading takes each stage's colour in turn
+const CHIP = ['#6f8a33', '#e0ad3a', '#9a5a24', '#2a140c'].map(hex);
 // sweetness · moisture · firmness, per stage (drawn as little meters)
 const METERS = [
   [0.18, 0.88, 0.95],
@@ -18,19 +20,21 @@ const METERS = [
 // half-brown rutab look; tamr (3) is fully dark and wrinkled.
 const ripeness = (S) => (S <= 1 ? S : S <= 2 ? 1 + (S - 1) * 0.5 : 1.5 + (S - 2) * 1.5);
 
-// 06 · Ripening. A pinned "horizontal" section: the copy for each stage slides
-// sideways while one 3D bunch ripens continuously through Kimri, Khalal, Rutab
-// and Tamr.
+// 06 · Ripening. One pinned panel: as you scroll, the 3D bunch ripens
+// continuously through Kimri, Khalal, Rutab and Tamr while the meters and the
+// stage rail follow it.
 export function ripenScene() {
   const root = document.getElementById('ripen');
   const bg = root.querySelector('.ripen__bg');
   const gl = root.querySelector('.ripen__gl');
-  const panels = [...root.querySelectorAll('.ripen__panel')].map((el) => ({
-    el,
-    rule: el.querySelector('.eyebrow__rule'),
-    sqs: [...el.querySelectorAll('[data-sq]')].map((e) => e._sq),
-    bars: [...el.querySelectorAll('.ripen__meter b')],
-  }));
+  const panelEl = root.querySelector('.ripen__panel');
+  const panel = {
+    el: panelEl,
+    chip: panelEl.querySelector('.ripen__chip'),
+    rule: panelEl.querySelector('.eyebrow__rule'),
+    sqs: [...panelEl.querySelectorAll('[data-sq]')].map((e) => e._sq),
+    bars: [...panelEl.querySelectorAll('.ripen__meter b')],
+  };
   const railFill = root.querySelector('.ripen__rail-line b');
   const nodes = [...root.querySelectorAll('.ripen__node')];
   const nodeSqs = nodes.map((n) => n.querySelector('[data-sq]')._sq);
@@ -77,10 +81,8 @@ export function ripenScene() {
       if (ly < -H || ly > range + 2 * H) return;
       const t = s.t;
       const P = clamp(ly / range);
-      // linger on each stage, move briskly between them
-      const raw = P * 3;
-      const i0 = Math.min(2, Math.floor(raw));
-      const S = i0 + ease.inOut(invlerp(0.2, 0.8, raw - i0));
+      // one continuous ripening across the section
+      const S = 3 * ease.inOutSine(P);
       const k = W / 1920;
 
       // --- background: warm wash, light behind the bunch, drifting fronds and motes ---
@@ -122,17 +124,14 @@ export function ripenScene() {
         pitch: 0.05,
       });
 
-      // --- copy panels slide sideways ---
-      panels.forEach((p, i) => {
-        const o = i - S;
-        const vis = 1 - smoothstep(0.12, 0.5, Math.abs(o));
-        p.el.style.opacity = 1 - smoothstep(0.3, 0.62, Math.abs(o));
-        p.el.style.transform = `translateX(${o * 30}rem)`;
-        p.rule.style.transform = `scaleX(${ease.out(vis)})`;
-        const n = p.sqs.length;
-        p.sqs.forEach((q, j) => q.setProgress(invlerp(j / (n + 2), (j + 3) / (n + 2), vis)));
-        p.bars.forEach((b, j) => (b.style.transform = `scaleX(${METERS[i][j] * ease.out(invlerp(0.4, 1, vis))})`));
-      });
+      // --- the panel writes in as the sheet arrives, then tracks the stage ---
+      const vis = invlerp(-0.5 * H, 0.04 * range, ly);
+      panel.el.style.opacity = vis > 0 ? 1 : 0;
+      panel.rule.style.transform = `scaleX(${ease.out(invlerp(0, 0.4, vis))})`;
+      const n = panel.sqs.length;
+      panel.sqs.forEach((q, j) => q.setProgress(invlerp(j / (n + 2), (j + 3) / (n + 2), vis)));
+      panel.chip.style.setProperty('--c', rgba(ramp(CHIP, S / 3)));
+      panel.bars.forEach((b, j) => (b.style.transform = `scaleX(${ramp(METERS.map((m) => [m[j]]), S / 3)[0] * ease.out(invlerp(0.4, 1, vis))})`));
 
       railFill.style.transform = `scaleX(${S / 3})`;
       nodes.forEach((n, i) => {

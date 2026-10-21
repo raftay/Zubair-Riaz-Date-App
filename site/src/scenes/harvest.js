@@ -5,7 +5,8 @@ import { Studio3D } from '../lib/studio3d.js';
 
 // 07 · Harvest + 08 · Packaging: one pinned studio shot (see studio3d.js).
 // The bunch is cut and caught, one perfect date is inspected and chosen, then
-// it's boxed, ribboned, sealed and tagged.
+// it's boxed, ribboned, sealed and tagged. Two stops carry copy: the inspection
+// and the finished box.
 export function harvestScene() {
   const root = document.getElementById('harvest');
   const bg = root.querySelector('.harvest__bg');
@@ -17,8 +18,7 @@ export function harvestScene() {
     const el = root.querySelector(sel);
     return { el, rule: el.querySelector('.eyebrow__rule'), sqs: [...el.querySelectorAll('[data-sq]')].map((e) => e._sq) };
   };
-  const headA = block('.h-head--a');
-  const headB = block('.h-head--b');
+  const head = block('.h-head');
   const cta = block('.h-cta');
   const inspect = root.querySelector('.h-inspect');
   const inspectSqs = [...inspect.querySelectorAll('[data-sq]')].map((e) => e._sq);
@@ -115,7 +115,8 @@ export function harvestScene() {
         flash.style.transform = `translate(${fx}px, ${fy}px) rotate(-24deg) scale(${0.6 + fl})`;
       }
 
-      show(headA, Math.min(invlerp(-0.45 * H, 0.03 * range, ly), 1 - invlerp(0.19, 0.25, h)));
+      // the heading stays up through the cut and the inspection: one stop for the harvest
+      show(head, Math.min(invlerp(-0.45 * H, 0.03 * range, ly), 1 - invlerp(0.53, 0.58, h)));
 
       // inspection: the chosen date, checked and batched
       const iv = invlerp(0.34, 0.41, h) * (1 - invlerp(0.53, 0.58, h));
@@ -136,7 +137,6 @@ export function harvestScene() {
       lead.style.strokeDashoffset = 1 - ease.out(invlerp(0.1, 0.5, iv));
       leadDot.style.opacity = iv;
 
-      show(headB, Math.min(invlerp(0.63, 0.72, h), 1 - invlerp(0.87, 0.92, h)));
       const cv = invlerp(0.9, 0.97, h);
       show(cta, cv);
       cta.el.querySelector('.h-cta__row').style.opacity = ease.out(invlerp(0.4, 1, cv));
